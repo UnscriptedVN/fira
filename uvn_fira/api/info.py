@@ -12,7 +12,7 @@
 #
 """The info submodule contains the utilities to get the world and player information for a given
     level."""
-# import renpy                            #pylint:disable=import-error
+import renpy                            #pylint:disable=import-error
 from .player import CSPlayer
 from .world import CSWorld
 from ..core import CSWorldConfigReader
