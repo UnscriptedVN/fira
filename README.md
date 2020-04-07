@@ -2,6 +2,10 @@
 
 Fira is the package that contains the backend code and API code for Unscripted's minigame. Fira is named after Fira Sans, one of the game's characters.
 
+
+[![MPL](https://img.shields.io/github/license/alicerunsonfedora/fira)](LICENSE.txt)
+![Python](https://img.shields.io/badge/python-2.7+-blue.svg)
+
 ## Requirements
 
 - Python 2.7
