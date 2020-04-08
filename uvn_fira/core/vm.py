@@ -158,7 +158,8 @@ class CSNadiaVM(object):
         Returns:
             array (list): The specified item, or None if it doesn't exist.
         """
-        return self.__dict__[name] if name in self.__dict__ and isinstance(name, list) else None
+        return self.__dict__[name] if name in self.__dict__ \
+            and type(self.__dict__[name]) is list else None #pylint:disable=unidiomatic-typecheck
 
     def pos(self):
         """Get the current player position from the VM execution stack.
