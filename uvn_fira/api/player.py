@@ -58,12 +58,12 @@ class CSPlayer(object):
 
         if "vm" in kwargs:
             self._vm = kwargs["vm"]
-            self._vm.alloc("World.coins", len(self._world_coins))
-            self._vm.alloc("Player.inventory", len(self._world_coins))
+            self._vm.alloc("world_coins", len(self._world_coins))
+            self._vm.alloc("inventory", len(self._world_coins))
 
             for coin in self._world_coins:
                 self._vm.set(coin)
-                self._vm.push("World.coins", self._world_coins.index(coin))
+                self._vm.push("world_coins", self._world_coins.index(coin))
 
     def location(self):
         """Get the player's current position.
@@ -149,8 +149,8 @@ class CSPlayer(object):
             self._inventory.append(self._position)
 
             if self._vm:
-                self._vm.pop("World.coins", self._world_coins.index(self._position))
-                self._vm.push("Player.inventory", self._world_coins.index(self._position))
+                self._vm.pop("world_coins", self._world_coins.index(self._position))
+                self._vm.push("inventory", self._world_coins.index(self._position))
                 self._vm.collect()
 
             self._world_coins.remove(self._position)

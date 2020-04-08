@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "uvn-fira"
-version = "1.2.2"
+version = "1.2.3"
 description = "The backend and API code for the Unscripted mini-game."
 authors = ["Marquis Kurt <software@marquiskurt.net>"]
 license = "MPL-2.0"
