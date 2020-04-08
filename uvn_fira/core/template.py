@@ -33,7 +33,7 @@ def generate_template(filepath, for_level=0):
 #
 
 # Import the level information APIs.
-from minigame.api import get_level_information
+from uvn_fira.api import get_level_information
 
 # Get all of the information for this particular level.
 game_player, game_world = get_level_information(%s)
