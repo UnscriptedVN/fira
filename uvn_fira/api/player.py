@@ -147,12 +147,13 @@ class CSPlayer(object):
         """
         if self._position in self._world_coins:
             self._inventory.append(self._position)
-            self._world_coins.remove(self._position)
 
             if self._vm:
                 self._vm.pop("World.coins", self._world_coins.index(self._position))
                 self._vm.push("Player.inventory", self._world_coins.index(self._position))
                 self._vm.collect()
+
+            self._world_coins.remove(self._position)
         return self
 
     def exit(self):
