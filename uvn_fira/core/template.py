@@ -28,15 +28,25 @@ def generate_template(filepath, for_level=0):
 # It is recommended to keep the appropriate template code to start. Remember that the goal is to
 # collect all coins and reach the exit.
 #
-# To access the documentation for the minigame APIs, either go to Settings > Minigame
-# and click "Open Documentation" or go to Help > Documentation.
+# To access the documentation for the minigame APIs, either go to Settings > Minigame and click
+# "Open Documentation", go to Help > Documentation, or visit the following link in your browser:
+# https://fira.marquiskurt.net/api/. Go to https://fira.marquiskurt.net/gameplay.html#limitations-1
+# to view the limitations of using the official API as called here.
+#
+# If you want to use a third-party tool or framework instead of the official Fira API and want to
+# sideload in a virtual machine file, do not write any code in this file. More information can be
+# found at https://fira.marquiskurt.net/implementation.html#obtaining-code-from-third-party-tools.
 #
 
 # Import the level information APIs.
+import renpy
 from uvn_fira.api import get_level_information
 
 # Get all of the information for this particular level.
-game_player, game_world = get_level_information(%s)
+game_player, game_world = get_level_information(%s,
+                                                fn_path=renpy.config.savedir + "/minigame/",
+                                                exists=renpy.loadable,
+                                                load=renpy.exports.file)
 
 # WRITE CODE HERE
     """ % (for_level, for_level)

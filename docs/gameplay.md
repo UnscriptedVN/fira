@@ -32,6 +32,8 @@ In the basic mode, players click a series of buttons provided on the screen that
 
 Players also get to view what commands will be executed in the minigame's virtual machine, [NadiaVM](./implementation.html#nadiavm). This VM input view, however, does not display all of the VM commands: commands such as `alloc` and `set` are not displayed since the player cannot control these aspects in basic mode.
 
+
+#### Limitations
 There are also some limitations of basic mode in the minigame:
 
 - The basic mode does not support control flow or functions, meaning that players will need to click all of the buttons.
@@ -44,12 +46,12 @@ There are also some limitations of basic mode in the minigame:
 
 In the advanced mode, players are offered the ability to solve puzzles programmatically using Python or another language that can compile NadiaVM files. The Fira package offers an official API that can be used to write the necessary code. Players do not see a VM input view or any buttons for inputting commands, but rather see the world preview.
 
-> **Note**: The documentation regarding the APIs refer to the official APIs provided by this package. Some functions and utilities may differ in different APIs or implementations.
-
 By default, the advanced mode is disabled; it can be enabled in **Settings &rsaquo; Minigame** by ticking "Enable advanced mode".
 
+
+#### Limitations
 There are also some limitations to the official API when using Advanced Mode:
 
 - Players should not use the `player` variable. This conflicts with the game's own player variable. As a workaround, the template files generate starter code that stores the minigame player as `game_player`.
-- The Python script must end with the `exit` command. The player's exit command is also responsible for writing  the virtual machine file.
+- The Python script must end with the [`exit`](./api/player.html#exit) command if using the official Fira API. The player's exit command is also responsible for writing  the virtual machine file.
 - Some aspects of the minigame may work unexpectedly. The API has been designed with some safety checks but is not a safeguard against Python's quirks.
