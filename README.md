@@ -1,10 +1,11 @@
 # Fira
 
-Fira is the package that contains the backend code and API code for Unscripted's minigame. Fira is named after Fira Sans, one of the game's characters.
+**Fira** is the main backend and API code for the minigame in [Unscripted](https://unscripted.marquiskurt.net), a visual novel about software development. Fira provides many facets of the minigame, including a public API that players can use to code solutions to the minigame puzzles, a configuration and data generator from level files, and a virtual machine that runs low-level code that the minigame processes. Fira is named after Fira Sans, one of the game's characters.
 
 
 [![MPL](https://img.shields.io/github/license/alicerunsonfedora/fira)](LICENSE.txt)
 ![Python](https://img.shields.io/badge/python-2.7+-blue.svg)
+[![PyPI version](https://badge.fury.io/py/uvn-fira.svg)](https://pypi.org/project/uvn-fira)
 
 ## Requirements
 
@@ -37,6 +38,23 @@ poetry build
 ```
 
 The resulting wheel files will be available in the `dist` directory.
+
+## Usage
+
+For players installing this package to solve minigame puzzles, using the Fira package to access the API is relatively straightforward:
+
+```py
+from uvn_fira.api import get_level_information, CSPlayer, CSWorld
+
+gp, gw = get_level_information(0,
+                               fn_path=renpy.config.savedir + "/minigame",
+                               exists=renpy.loadable,
+                               load=renpy.exports.file) # type: (CSPlayer, CSWorld)
+```
+
+Documentation on the API is located inside of Unscripted by going to **Help &rsaquo; Minigame** or **Settings &rsaquo; Minigame**.
+
+The documentation for the entire package is located at [https://fira.marquiskurt.net](https://fira.marquiskurt.net), which is useful for developers that wish to make custom toolkits that connect to the minigame's virtual machine or for modders that wish to make custom minigame levels.
 
 ## Reporting bugs
 
