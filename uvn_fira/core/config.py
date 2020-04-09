@@ -70,7 +70,7 @@ class CSWorldConfigReader(object):
             load_fn = lambda a: open(a, 'r')
 
             if "exists" in kwargs and callable(kwargs["exists"]):
-                fn = kwargs["exists"]
+                exists_fn = kwargs["exists"]
 
             if not exists_fn(filepath):
                 raise IOError("Cannot locate file %s" % (filepath))
