@@ -25,11 +25,11 @@ In the case of the two game modes in Unscripted, both modes make use of Fira's c
 
 #### Basic Mode
 
-For the basic mode, a virtual machine writer (`CSNadiaVMWriterBuilder`) is used to keep track of the commands given by the player. When a player clicks a command button, the writer will add the command to the writer's command list; likewise, when a player clicks "Undo" or "Clear", the list is modified. After the player clicks "Run", the writer generates a VM file in the save directory of the game that will be read by the preview scene.
+For the basic mode, a virtual machine writer ([`CSNadiaVMWriterBuilder`](./core/vm.html#csnadiavmwriterbuilder)) is used to keep track of the commands given by the player. When a player clicks a command button, the writer will add the command to the writer's command list; likewise, when a player clicks "Undo" or "Clear", the list is modified. After the player clicks "Run", the writer generates a VM file in the save directory of the game that will be read by the preview scene.
 
 #### Advanced Mode
 
-For the advanced mode via the Fira API module, the APIs link to a hidden VM writer (`CSNadiaVMWriter`) that gets invoked when the player calls functions in the API. The `exit` method of the `CSPlayer` class is responsible for writing the VM file, hence why Python scripts must invoke this function. When the player is finished writing the script and clicks "Run", the Python compiler compiles and executes the script inside of Ren'Py's Python environment, generating the VM file in the process in the save directory of the game that will be read by the preview scene.
+For the advanced mode via the Fira API module, the APIs link to a hidden VM writer ([`CSNadiaVMWriter`](./core/vm.html#csnadiavmwriter)) that gets invoked when the player calls functions in the API. The [`exit`](./api/player.html#exit) method of the [`CSPlayer`](./api/player.html#csplayer) class is responsible for writing the VM file, hence why Python scripts must invoke this function. When the player is finished writing the script and clicks "Run", the Python compiler compiles and executes the script inside of Ren'Py's Python environment, generating the VM file in the process in the save directory of the game that will be read by the preview scene.
 
 ### Obtaining code from third-party tools
 
@@ -39,7 +39,7 @@ Players may also choose to write their own VM files directly, though this is not
 
 ### Preview scene execution
 
-Once the VM file is written, the data is sent to a virtual machine emulator (`CSNadiaVM`), which is later sent to the preview scene. Once the preview scene renders the world and components, the preview scene will call on the VM emulator to execute the commands in order. For commands that require animation (i.e., `move` and `collect`), execution pauses as the preview scene presents the corresponding animation.
+Once the VM file is written, the data is sent to a virtual machine emulator ([`CSNadiaVM`](./core/vm.html#csnadiavm)), which is later sent to the preview scene. Once the preview scene renders the world and components, the preview scene will call on the VM emulator to execute the commands in order. For commands that require animation (i.e., `move` and `collect`), execution pauses as the preview scene presents the corresponding animation.
 
 ## NadiaVM
 

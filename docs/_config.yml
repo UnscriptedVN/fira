@@ -10,3 +10,5 @@ footer_content: "Copyright &copy; 2020 Marquis Kurt. Distributed by an <a href=\
 aux_links:
   "Get Unscripted":
     - "//unscripted.marquiskurt.net"
+  "YouTrack":
+    - "//youtrack.marquiskurt.net/youtrack/issues/FIRA"

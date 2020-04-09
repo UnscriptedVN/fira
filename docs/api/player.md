@@ -46,10 +46,6 @@ Construct the Player object.
     an empty list.
 - **vm**: The virtual machine writer, if available.
 
----
-## Methods
-{: .no_toc}
-
 ### location()
 
 Get the player's current position.

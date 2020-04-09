@@ -1,7 +1,7 @@
 ---
 layout: default
 title: Grid
-parent: API
+parent: Core Utilities
 ---
 
 # Grid
@@ -13,16 +13,9 @@ parent: API
 1. TOC
 {: toc}
 
-The grid submodule contains a public-facing version of the internal grid used in the Unscripted
-    minigame core.
+This submodule contains the grid data type used in the minigame world.
 
-The world grid is a two-dimensional array (list of lists) that contain strings that determine what
-    element is present at the specific row and column. The main class responsible for working with
-    the grid, [`CSWorldGrid`](#csworldgrid), is a clean and lightweight implementation of this grid with multiple
-    utilities to manage it. The grid implementation is not dependent on the `numpy` library and is
-    geared towards accessing elements and other information, rather than mathematical operations.
-
-## CSWorldGrid
+## CSGrid
 
 A class representation of a grid.
 

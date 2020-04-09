@@ -59,11 +59,6 @@ Construct a World object.
 - **from_data** (CSWorldDataGenerator): The world generator used to create the world data.
 - **\*\*kwargs**: Arbitrary keyword arguments.
 
-----
-
-## Methods
-{: .no_toc}
-
 ### player()
 
 Get the player's current location in the world.

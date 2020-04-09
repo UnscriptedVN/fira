@@ -38,6 +38,10 @@ poetry build
 
 The resulting wheel files will be available in the `dist` directory.
 
+## Reporting bugs
+
+Bugs and feature requests for Fira can be submitted on YouTrack. [Submit a report &rsaquo;](https://youtrack.marquiskurt.net/youtrack/newIssue?project=FIRA)
+
 ## License
 
 The Fira package is licensed under the Mozilla Public License v2.0.
