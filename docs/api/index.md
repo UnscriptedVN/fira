@@ -3,6 +3,7 @@ layout: default
 title: API
 nav_order: 4
 has_children: true
+has_toc: false
 ---
 
 # Fira API
@@ -20,12 +21,15 @@ The Unscriped Minigame Application Programming Interface (API) allows players to
 > the API module.
 
    The documentation for some components in the core submodule are provided for reference namely,
-    `CSWorldGrid`.
+    [`CSWorldGrid`](./grid.html#csworldgrid).
+
+## Submodules
 
 The `api` module comes with a few submodules that contain function and utilities for multiple
     aspects of the minigame:
 
-- `player` hosts all of the code related to manipulating the player in the minigame.
-- `world` hosts all of the code related to viewing and gathering information about the world
+- [`player`](./player.html) hosts all of the code related to manipulating the player in the minigame.
+- [`world`](./world.html) hosts all of the code related to viewing and gathering information about the world
     in the minigame.
-- `grid` hosts a publicly available version of the internal grid system used for world generation.
+- [`grid`](./grid.html) hosts a publicly available version of the internal grid system used for world generation.
+- [`info`](./info.html) hosts all of the code related to generating the tools necessary to start scripting.

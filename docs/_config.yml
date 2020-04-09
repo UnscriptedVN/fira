@@ -6,3 +6,7 @@ remote_theme: pmarsceill/just-the-docs
 search_enabled: true
 markdown: kramdown
 footer_content: "Copyright &copy; 2020 Marquis Kurt. Distributed by an <a href=\"https://mozilla.org/MPL/2.0/\">MPL v2.0 license.</a>"
+
+aux_links:
+  "Get Unscripted":
+    - "//unscripted.marquiskurt.net"

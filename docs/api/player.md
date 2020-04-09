@@ -1,6 +1,7 @@
 ---
 layout: default
 title: Player
+parent: API
 ---
 
 # Player
@@ -16,7 +17,7 @@ The player module contains the functions and classes necessary to manipulate pla
     a minigame world.
 
 The module contains a class that lets players control the behavior of their minigame counterpart
-    by moving in a given direction, collecting an item, etc. (`CSPlayer`). To prevent accidental
+    by moving in a given direction, collecting an item, etc. ([`CSPlayer`](#csplayer)). To prevent accidental
     manipulation of the original world data, the player class uses its own position property to
     update its location.
 
@@ -33,14 +34,14 @@ Construct the Player object.
 #### Arguments
 {: .no_toc}
 
-- **in_world** (CSWorld): The world the player is located in.
+- **in_world** ([CSWorld](./world.html#csworld)): The world the player is located in.
 - **\*\*kwargs** (dict): Arbitrary keyword arguments.
 
 #### Kwargs
 {: .no_toc}
 
 - **at_position** (tuple): The position the player should be placed in. Defaults to the player
-    position in the world (`CSWorld.player`).
+    position in the world ([`CSWorld.player`](./world.html#player)).
 - **with_inv** (list): A list containing items that the player will have to start. Defaults to
     an empty list.
 - **vm**: The virtual machine writer, if available.
