@@ -12,8 +12,8 @@
 #
 """This submodule contains the configuration system for reading worlds."""
 
+import os
 import toml
-import renpy                                #pylint:disable=import-error
 from .data import CSWorldDataGenerator
 
 class CSWorldConfigGenerateError(Exception):
@@ -47,8 +47,17 @@ class CSWorldConfigReader(object):
         Arguments:
             filepath: The path to the configuration file to generate the world from. Defaults to
                 an empty string.
-            **kwargs: List of keyword arguments to define the configuration (or override file
-                configuration properties).
+            **kwargs: Arbitrary keyword arguments.
+
+        Kwargs:
+            title (str): The title of the map.
+            checks (list): A list containing the checks for this particular level.
+            allowed (list): A list containing the allowed blocks in basic mode.
+            world (str): A string representation of the world layout.
+            exists (callable): The function to use, if not relying on the built-in `os` module
+                to determine whether the configuration file path is loadable.
+            load (callable): The function to use, if not relying on the the built-in `open`
+                function to load the file object.
         """
         config = {}
 
@@ -56,10 +65,20 @@ class CSWorldConfigReader(object):
             raise CSWorldConfigGenerateError("Cannot generate an empty configuration.")
 
         if filepath:
-            if not renpy.loader.loadable(filepath):
+
+            exists_fn = os.path.isfile
+            load_fn = lambda a: open(a, 'r')
+
+            if "exists" in kwargs and callable(kwargs["exists"]):
+                fn = kwargs["exists"]
+
+            if not exists_fn(filepath):
                 raise IOError("Cannot locate file %s" % (filepath))
 
-            with renpy.exports.file(filepath) as file_object:
+            if "load" in kwargs and callable(kwargs["load"]):
+                load_fn = kwargs["load"]
+
+            with load_fn(filepath) as file_object:
                 config = toml.load(file_object)
 
             if "level" not in config:
