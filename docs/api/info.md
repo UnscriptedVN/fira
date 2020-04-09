@@ -37,6 +37,10 @@ Coming soon
 {: .label .label-yellow}
 
 - **config_file** (str): The path to the level configuration file, excluding the file name.
+- **exists** (callable): The function to use, if not relying on the built-in `os` module
+    to determine whether the configuration file path is loadable.
+- **load** (callable): The function to use, if not relying on the the built-in `open`
+    function to load the file object.
 
 #### Returns
 {: .no_toc}

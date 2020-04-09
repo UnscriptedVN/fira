@@ -29,6 +29,10 @@ def get_level_information(level, fn_path="", **kwargs):
 
     Kwargs:
         config_file (str): The path to the level configuration file, excluding the file name.
+        exists (callable): The function to use, if not relying on the built-in `os` module
+            to determine whether the configuration file path is loadable.
+        load (callable): The function to use, if not relying on the the built-in `open`
+            function to load the file object.
 
     Returns:
         info (tuple): A tuple containing the `minigame.api.player.CSPlayer` object and the
@@ -37,7 +41,7 @@ def get_level_information(level, fn_path="", **kwargs):
     conf = kwargs["config_file"] + "/level%s.toml" % (toml) \
         if "config_file" in kwargs \
             else "core/minigame/levels/level%s.toml" % (level)
-    w_info = CSWorldConfigReader(conf)
+    w_info = CSWorldConfigReader(conf, kwargs)
     writer = CSNadiaVMWriter(fn_path + "/lvl%s.nvm" % (level))
     world = CSWorld(from_data=w_info.data)
     player = CSPlayer(in_world=world, vm=writer)
