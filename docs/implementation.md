@@ -32,8 +32,6 @@ For the basic mode, a virtual machine writer (`CSNadiaVMWriterBuilder`) is used 
 For the advanced mode via the Fira API module, the APIs link to a hidden VM writer (`CSNadiaVMWriter`) that gets invoked when the player calls functions in the API. The `exit` method of the `CSPlayer` class is responsible for writing the VM file, hence why Python scripts must invoke this function. When the player is finished writing the script and clicks "Run", the Python compiler compiles and executes the script inside of Ren'Py's Python environment, generating the VM file in the process in the save directory of the game that will be read by the preview scene.
 
 ### Obtaining code from third-party tools
-Coming soon
-{: .label .label-yellow }
 
 Third-party tools will most likely create an abstraction layer in a similar fashion to the Fira API module. These tools will eventually create the VM file that the preview scene will read. Implementation of the VM varies depending on the tool, so it is recommended that you read the documentation of the respective tool or library on how it writes VM files.
 

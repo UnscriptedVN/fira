@@ -33,8 +33,8 @@ the file name itself.
 #### Kwargs
 {: .no_toc}
 
-Coming soon
-{: .label .label-yellow}
+New
+{: .label}
 
 - **config_file** (str): The path to the level configuration file, excluding the file name.
 - **exists** (callable): The function to use, if not relying on the built-in `os` module
