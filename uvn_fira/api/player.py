@@ -145,15 +145,15 @@ class CSPlayer(object):
             player (CSPlayer): The Player object that committed the collect action. This is useful
                 in cases where chaining methods is preferred.
         """
-        if self._position in self._world_coins:
-            self._inventory.append(self._position)
+        item_index = self._world_coins.index(self._position)
+        self._inventory.append(self._position)
 
-            if self._vm:
-                self._vm.pop("world_coins", self._world_coins.index(self._position))
-                self._vm.push("inventory", self._world_coins.index(self._position))
-                self._vm.collect()
+        if self._vm:
+            self._vm.pop("world_coins", item_index)
+            self._vm.push("inventory", item_index)
+            self._vm.collect()
 
-            self._world_coins.remove(self._position)
+        self._world_coins[item_index] = None
         return self
 
     def exit(self):
