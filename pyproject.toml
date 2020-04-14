@@ -5,7 +5,7 @@ description = "The backend and API code for the Unscripted mini-game."
 authors = ["Marquis Kurt <software@marquiskurt.net>"]
 license = "MPL-2.0"
 readme = "README.md"
-homepage = "https://github.com/alicerunsonfedora/fira"
+homepage = "https://github.com/UnscriptedVN/fira"
 documentation = "https://fira.marquiskurt.net"
 
 [tool.poetry.dependencies]
