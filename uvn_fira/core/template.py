@@ -17,6 +17,7 @@ The template files are generated when the game starts and are replaced if none a
 """
 
 def generate_template(filepath, for_level=0):
+    # type: (str, int) -> None
     """Generate a template file using the Minigame APIs.
 
     Arguments:

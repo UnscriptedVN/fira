@@ -29,6 +29,7 @@ class CSWorldDataGenerator(object):
     _dimensions = 0, 0
 
     def __init__(self, data=""):
+        # type: (CSWorldDataGenerator, str) -> None
         """Construct the world data generator.
 
         Arguments:
@@ -85,6 +86,7 @@ class CSWorldDataGenerator(object):
         return ("Dimensions: %s\nMap\n=====\n" + self._str) % (self._dimensions)
 
     def size(self):
+        # type: (CSWorldDataGenerator) -> tuple[int, int]
         """Get the size of the given world data grid.
 
         Returns:
@@ -93,6 +95,7 @@ class CSWorldDataGenerator(object):
         return self._dimensions
 
     def to_grid(self):
+        # type: (CSWorldDataGenerator) -> CSGrid
         """Get the world data as a world grid.
 
         Returns:
@@ -101,6 +104,7 @@ class CSWorldDataGenerator(object):
         return CSGrid(self._data, grid_filter=None)
 
     def coins(self):
+        # type: (CSWorldDataGenerator) -> CSGrid
         """Get the world coin data.
 
         Returns:
@@ -109,6 +113,7 @@ class CSWorldDataGenerator(object):
         return CSGrid(self._data, grid_filter=lambda x: x == "COIN")
 
     def walls(self):
+        # type: (CSWorldDataGenerator) -> CSGrid
         """Get the world wall data.
 
         Returns:

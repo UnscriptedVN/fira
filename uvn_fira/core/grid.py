@@ -11,6 +11,8 @@
 # file, You can obtain one at https://mozilla.org/MPL/2.0/.
 #
 """This submodule contains the grid data type used in the minigame world."""
+from typing import Optional, Callable
+
 class CSGrid(object):
     """A class representation of a grid.
 
@@ -26,6 +28,7 @@ class CSGrid(object):
     grid = []
 
     def __init__(self, grid, grid_filter=None):
+        # type: (CSGrid, list, Optional[Callable[[any], any]]) -> None
         """Construct a grid.
 
         If a filter is supplied with the grid, the grid will filter for the items specified in the
@@ -57,6 +60,7 @@ class CSGrid(object):
         return not self.__eq__(value)
 
     def shape(self):
+        # type: (CSGrid) -> tuple[int, int]
         """Get the shape of the grid.
 
         Returns:
@@ -67,6 +71,7 @@ class CSGrid(object):
         return rows, columns
 
     def as_list(self):
+        # type: (CSGrid) -> list[any]
         """Convert the grid to a list of coordinates containing a non-void item.
 
         .. NOTE::
@@ -85,6 +90,7 @@ class CSGrid(object):
         return coordinates
 
     def first(self, of=""):     #pylint:disable=invalid-name
+        # type: (CSGrid, str) -> tuple[int, int]
         """Get the first instance of an item in the grid.
 
         Arguments:
@@ -104,6 +110,7 @@ class CSGrid(object):
         return coords
 
     def last(self, of=""):      #pylint:disable=invalid-name
+        # type: (CSGrid, str) -> tuple[int, int]
         """Get the last instance of an item in the grid.
 
         Arguments:
@@ -125,6 +132,7 @@ class CSGrid(object):
         return coords
 
     def element_at(self, row, column):
+        # type: (CSGrid, int, int) -> Any
         """Get the element at a specified position.
 
         Arguments:
