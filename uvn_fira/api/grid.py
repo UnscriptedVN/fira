@@ -19,6 +19,7 @@ The world grid is a two-dimensional array (list of lists) that contain strings t
     utilities to manage it. The grid implementation is not dependent on the `numpy` library and is
     geared towards accessing elements and other information, rather than mathematical operations.
 """
+from typing import Callable, Optional
 
 from ..core import CSGrid
 
@@ -28,6 +29,7 @@ from ..core import CSGrid
 class CSWorldGrid(CSGrid):      #pylint:disable=missing-class-docstring
 
     def __init__(self, grid, filter=None):  #pylint:disable=redefined-builtin
+        # type: (CSWorldGrid, list, Optional[Callable[[any], any]]) -> None
         CSGrid.__init__(self, grid, filter)
 
     def __str__(self):
@@ -40,16 +42,21 @@ class CSWorldGrid(CSGrid):      #pylint:disable=missing-class-docstring
         return CSGrid.__ne__(self, value)
 
     def shape(self):
+        # type: (CSWorldGrid) -> tuple[int, int]
         return CSGrid.shape(self)
 
     def as_list(self):
+        # type: (CSWorldGrid) -> list[any]
         return CSGrid.as_list(self)
 
     def first(self, of=""):
+        # type: (CSWorldGrid, str) -> any
         return CSGrid.first(self, of)
 
     def last(self, of=""):
+        # type: (CSWorldGrid, str) -> any
         return CSGrid.last(self, of)
 
     def element_at(self, row, column):
+        # type: (CSWorldGrid, int, int) -> any
         return CSGrid.element_at(self, row, column)

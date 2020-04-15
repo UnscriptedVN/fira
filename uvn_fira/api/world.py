@@ -39,8 +39,7 @@ It may be impractical in some cases to access an element in the grid directly. T
     manner by making common operations such as getting a list containing coordinates of a specific
     type of item and getting the first instance of an item easier.
 """
-
-from ..core import CSNadiaVMWriter
+from ..core import CSNadiaVMWriter, CSWorldDataGenerator
 from .grid import CSWorldGrid
 
 class CSWorld(object):
@@ -55,6 +54,7 @@ class CSWorld(object):
     _vm_author = CSNadiaVMWriter("null.nvm")
 
     def __init__(self, from_data, **kwargs):
+        # type: (CSWorld, CSWorldDataGenerator, dict) -> None
         """Construct a World object.
 
         Arguments:
@@ -70,6 +70,7 @@ class CSWorld(object):
             self._vm_author = CSNadiaVMWriter(kwargs["nvm"])
 
     def player(self):
+        # type: (CSWorld) -> tuple[int, int]
         """Get the player's current location in the world.
 
         Returns:
@@ -78,6 +79,7 @@ class CSWorld(object):
         return self._player_position
 
     def size(self):
+        # type: (CSWorld) -> tuple[int, int]
         """Get the size of the world.
 
         Returns:
@@ -86,6 +88,7 @@ class CSWorld(object):
         return self._dimensions
 
     def walls(self):
+        # type: (CSWorld) -> CSWorldGrid
         """Get the grid of walls in the world.
 
         Returns:
@@ -94,6 +97,7 @@ class CSWorld(object):
         return CSWorldGrid(self._grid.grid, lambda a: a == "WALL")
 
     def coins(self):
+        # type: (CSWorld) -> CSWorldGrid
         """Get the grid of coins in the world.
 
         Returns:
@@ -102,6 +106,7 @@ class CSWorld(object):
         return CSWorldGrid(self._grid.grid, lambda a: a == "COIN")
 
     def exit(self):
+        # type: (CSWorld) -> any
         """Get the location of the exit.
 
         Returns:

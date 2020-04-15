@@ -42,6 +42,7 @@ class CSWorldConfigReader(object):
     data = CSWorldDataGenerator("")
 
     def __init__(self, filepath="", **kwargs):
+        # type: (CSWorldConfigReader, str, dict) -> None
         """Construct the configuration reader.
 
         Arguments:

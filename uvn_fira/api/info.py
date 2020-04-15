@@ -19,6 +19,7 @@ from ..core import CSWorldConfigReader
 from ..core import CSNadiaVMWriter
 
 def get_level_information(level, fn_path="", **kwargs):
+    # type: (int, str, dict) -> tuple[CSPlayer, CSWorld]
     """Create a world and player based on a game level.
 
     Arguments:

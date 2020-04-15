@@ -34,6 +34,7 @@ class CSPlayer(object):
     _vm = None
 
     def __init__(self, in_world, **kwargs):
+        # type: (CSPlayer, CSWorld, dict) -> None
         """Construct the Player object.
 
         Arguments:
@@ -66,6 +67,7 @@ class CSPlayer(object):
                 self._vm.push("world_coins", self._world_coins.index(coin))
 
     def location(self):
+        # type: (CSPlayer) -> tuple[int, int]
         """Get the player's current position.
 
         Returns:
@@ -74,6 +76,7 @@ class CSPlayer(object):
         return self._position
 
     def origin(self):
+        # type: (CSPlayer) -> tuple[int, int]
         """Get the original starting position of the player.
 
         Returns:
@@ -82,6 +85,7 @@ class CSPlayer(object):
         return self._world.player()
 
     def capacity(self):
+        # type: (CSPlayer) -> int
         """Get the the count of how many items the player has.
 
         Returns:
@@ -90,6 +94,7 @@ class CSPlayer(object):
         return len(self._inventory)
 
     def blocked(self):
+        # type: (CSPlayer) -> bool
         """Determine whether a player is blocked at a given position.
 
         Returns:
@@ -105,6 +110,7 @@ class CSPlayer(object):
         return False
 
     def move(self, direction):
+        # type: (CSPlayer, str) -> CSPlayer
         """Move the player in a direction, if the direction results in the player
             being able to move into a non-walled area.
 
@@ -136,6 +142,7 @@ class CSPlayer(object):
         return self
 
     def collect(self):
+        # type: (CSPlayer) -> CSPlayer
         """Add an item into the player's inventory at the player's current position.
 
         If the item does not exist in the world, or the player already has the item in question,
@@ -157,6 +164,7 @@ class CSPlayer(object):
         return self
 
     def exit(self):
+        # type: (CSPlayer) -> None
         """Exit the level, if possible.
 
         If a VM is specified, the VM writer will also close the writer by writing to the VM file.
