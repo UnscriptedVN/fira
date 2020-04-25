@@ -15,4 +15,4 @@
 from uvn_fira.api import *
 from uvn_fira.core import *
 
-__version__ = "1.2.0"
+__version__ = "1.2.11"
