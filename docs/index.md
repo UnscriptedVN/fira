@@ -9,7 +9,7 @@ nav_order: 1
 **Fira** is the main backend and API code for the minigame in [Unscripted](https://unscripted.marquiskurt.net), a visual novel about software development. Fira provides many facets of the minigame, including a public API that players can use to code solutions to the minigame puzzles, a configuration and data generator from level files, and a virtual machine that runs low-level code that the minigame processes.
 
 [Install on PyPI](https://pypi.org/project/uvn-fira){: .btn .btn-purple}
-[View on GitHub](https://pypi.org/project/uvn-fira){: .btn }
+[View on GitHub](https://github.com/UnscriptedVN/fira){: .btn }
 
 ---
 
