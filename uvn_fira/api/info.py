@@ -43,7 +43,7 @@ def get_level_information(level, fn_path="", **kwargs):
         if "config_file" in kwargs \
             else "core/minigame/levels/level%s.toml" % (level)
     w_info = CSWorldConfigReader(conf, **kwargs)
-    writer = CSNadiaVMWriter(fn_path + "/compiled/lvl%s.nvm" % (level))
+    writer = CSNadiaVMWriter(fn_path + "/compiled/adv_lvl%s.nvm" % (level))
     world = CSWorld(from_data=w_info.data)
     player = CSPlayer(in_world=world, vm=writer)
     return player, world

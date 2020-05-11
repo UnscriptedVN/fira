@@ -58,6 +58,11 @@ NadiaVM comes with several commands used to perform tasks in the minigame:
 - `set constant (any)`: Set the top of the stack to a constant value.
 - `move player (str)`: Move the player in a given direction.
 - `exit player`: Try to end the execution script and finish the level.
+- <span class="label label-purple">New</span> `add`: Add the two topmost values on the stack.
+- <span class="label label-purple">New</span> `sub`: Subtract the two topmost values on the stack.
+- <span class="label label-purple">New</span> `mult`: Multiply the two topmost values on the stack.
+- <span class="label label-purple">New</span> `div`: Divide the two topmost values on the stack.
+- <span class="label label-purple">New</span> `neg`: Negate the topmost value on the stack. Effectively the same as pushing `-1` on the stack and calling `mult`.
 
 ### Limitations
 

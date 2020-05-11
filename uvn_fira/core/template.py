@@ -35,8 +35,9 @@ def generate_template(filepath, for_level=0):
 # to view the limitations of using the official API as called here.
 #
 # If you want to use a third-party tool or framework instead of the official Fira API and want to
-# sideload in a virtual machine file, do not write any code in this file. More information can be
-# found at https://fira.marquiskurt.net/implementation.html#obtaining-code-from-third-party-tools.
+# sideload in a virtual machine file, make sure "Force Python compiler" in Settings > Minigame is
+# disabled and that your tool compiles the NadiaVM file to your save directory like the following:
+# /path/to/RenPy/net.marquiskurt.unscripted/minigame/compiled/adv_lvl%s.nvm
 #
 
 # Import the level information APIs.
@@ -46,9 +47,9 @@ from uvn_fira.api import get_level_information, CSPlayer, CSWorld
 game_player, game_world = get_level_information(%s,
                                                 fn_path=renpy.config.savedir + "/minigame/",
                                                 exists=renpy.loadable,
-                                                load=renpy.exports.file) # type: (CSPlayer, CSWorld)
+                                                load=renpy.exports.file)
 
 # WRITE CODE HERE
-""" % (for_level, for_level)
+""" % (for_level, for_level, for_level)
     with open(filepath, 'w+') as file_obj:
         file_obj.write(template)

@@ -30,6 +30,12 @@ In the NadiaVM, there are several commands:
 - `set constant (any)`: Set the top of the stack to a constant value.
 - `move player (str)`: Move the player in a given direction.
 - `exit player`: Try to end the execution script and finish the level.
+- `add`: Add the two topmost values on the stack.
+- `sub`: Subtract the two topmost values on the stack.
+- `mult`: Multiply the two topmost values on the stack.
+- `div`: Divide the two topmost values on the stack.
+- `neg`: Negate the topmost value on the stack. Effectively the same as pushing `-1` on the stack
+    and calling `mult`.
 """
 from typing import Optional
 
@@ -86,20 +92,33 @@ class CSNadiaVM(object):
         """
         current = self._instructions.pop(0).split(" ")
 
-        if current[0] == "alloc":
-            self._alloc(current[1], int(current[2]))
-        elif current[0] == "push":
-            self._push(current[1], int(current[2]))
-        elif current[0] == "pop":
-            self._pop(current[1], int(current[2]))
-        elif current[0] == "set":
-            self._set(current[2])
-        elif current[0] == "move":
-            self._move(current[2])
-        elif current[0] == "collect":
-            pass
-        elif current[0] != "exit":
+        instruct = {
+            "alloc": self._alloc,
+            "push": self._push,
+            "pop" : self._pop,
+            "set": self._set,
+            "move": self._move,
+            "add": self._add,
+            "sub": self._sub,
+            "mult": self._mult,
+            "div": self._div,
+            "neg": self._neg,
+            "exit": "NOCOMM",
+            "collect": "NOCOMM",
+        }
+
+        if current[0] not in instruct:
             raise CSNadiaVMCommandNotFoundError("Invalid command: '%s'" % (current[0]))
+
+        command = instruct.get(current[0])
+        if current[0] in ["alloc", "push", "pop"]:
+            command(current[1], int(current[2]))
+        elif current[0] in ["set", "move"]:
+            command(current[2])
+        elif current[0] in ["add", "sub", "mult", "div", "neg"]:
+            command()
+        else:
+            pass
 
     def _alloc(self, name, size):
         """Allocate a space of memory for a given array.
@@ -154,6 +173,38 @@ class CSNadiaVM(object):
         trans_x, trans_y = transforms.get(direction, "east")
         curr_x, curr_y = self._player_pos
         self._player_pos = curr_x + trans_x, curr_y + trans_y
+
+    def _add(self):
+        """Add the two topmost values on the stack."""
+        x = self._stack.pop()
+        y = self._stack.pop()
+        self._stack.append(int(x) + int(y))
+
+    def _sub(self):
+        """Subtract the two topmost values on the stack."""
+        x = self._stack.pop()
+        y = self._stack.pop()
+        self._stack.append(int(x) - int(y))
+
+    def _mult(self):
+        """Multiply the two topmost values on the stack."""
+        x = self._stack.pop()
+        y = self._stack.pop()
+        self._stack.append(int(x) * int(y))
+
+    def _div(self):
+        """Divide the two topmost values on the stack."""
+        x = self._stack.pop()
+        y = self._stack.pop()
+        self._stack.append(int(x) / int(y))
+
+    def _neg(self):
+        """Negate the topmost value on the stack.
+
+        Effectively, this is the equivalent of pushing -1 onto the stack and calling mult.
+        """
+        self._stack.append(-1)
+        self._mult()
 
     def get(self, name):
         # type: (CSNadiaVM, str) -> Optional[list]
@@ -265,6 +316,29 @@ class CSNadiaVMWriterBuilder(object):
         """Try to exit the world and end execution of the script."""
         self.instructions.append("exit player\n")
 
+    def add(self):
+        """Add the two topmost values on the stack."""
+        self.instructions.append("add\n")
+
+    def sub(self):
+        """Subtract the two topmost values on the stack."""
+        self.instructions.append("sub\n")
+
+    def mult(self):
+        """Multiply the two topmost values on the stack."""
+        self.instructions.append("mult\n")
+
+    def div(self):
+        """Divide the two topmost values on the stack."""
+        self.instructions.append("div\n")
+
+    def neg(self):
+        """Negate the topmost value on the stack.
+
+        Effectively, this is the equivalent of pushing -1 onto the stack and calling mult.
+        """
+        self.instructions.append("neg\n")
+
     def write(self):
         # type: (CSNadiaVMWriterBuilder) -> None
         """Write the VM code to the requested file."""
@@ -366,6 +440,29 @@ class CSNadiaVMWriter(object):
         # type: (CSNadiaVMWriter) -> None
         """Try to exit the world and end execution of the script."""
         self.code += "exit player\n"
+
+    def add(self):
+        """Add the two topmost values on the stack."""
+        self.code += "add\n"
+
+    def sub(self):
+        """Subtract the two topmost values on the stack."""
+        self.code += "sub\n"
+
+    def mult(self):
+        """Multiply the two topmost values on the stack."""
+        self.code += "mult\n"
+
+    def div(self):
+        """Divide the two topmost values on the stack."""
+        self.code += "div\n"
+
+    def neg(self):
+        """Negate the topmost value on the stack.
+
+        Effectively, this is the equivalent of pushing -1 onto the stack and calling mult.
+        """
+        self.code += "neg\n"
 
     def write(self):
         # type: (CSNadiaVMWriter) -> None

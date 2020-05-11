@@ -154,6 +154,28 @@ Move the player in a given direction.
 ### collect()
 Collect. In the VM, this acts like a pause.
 
+### add()
+
+Add the two topmost values on the stack.
+
+### sub()
+
+Subtract the two topmost values on the stack.
+
+### mult()
+
+Multiply the two topmost values on the stack.
+
+### div()
+
+Divide the two topmost values on the stack.
+
+### neg()
+
+Negate the topmost value on the stack.
+
+Effectively, this is the equivalent of pushing -1 onto the stack and calling [`mult`](#mult).
+
 ### exit()
 Try to exit the world and end execution of the script.
 
@@ -232,6 +254,28 @@ Move the player in a given direction.
 
 ### collect()
 Collect. In the VM, this acts like a pause.
+
+### add()
+
+Add the two topmost values on the stack.
+
+### sub()
+
+Subtract the two topmost values on the stack.
+
+### mult()
+
+Multiply the two topmost values on the stack.
+
+### div()
+
+Divide the two topmost values on the stack.
+
+### neg()
+
+Negate the topmost value on the stack.
+
+Effectively, this is the equivalent of pushing -1 onto the stack and calling [`mult`](#mult).
 
 ### exit()
 Try to exit the world and end execution of the script.
