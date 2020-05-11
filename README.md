@@ -1,5 +1,5 @@
 <div align="center">
-    <img src="icon.png" width="256"/>
+    <img src="icon.png" width="128px"/>
     <h1>Unscripted Fira</h1>
 </div>
 
