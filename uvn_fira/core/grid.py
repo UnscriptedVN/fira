@@ -83,8 +83,9 @@ class CSGrid(object):
                 grid.
         """
         coordinates = []
-        for row in range(len(self.grid) - 1):
-            for column in range(len(self.grid[0]) - 1):
+        rows, columns = self.shape()
+        for row in range(rows):
+            for column in range(columns):
                 if self.grid[row][column] is not None:
                     coordinates.append((row, column))
         return coordinates

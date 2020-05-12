@@ -4,3 +4,4 @@
 **/**.egg-info
 docs/_site/
 .idea/**
+tests/test.nvm
