@@ -9,6 +9,7 @@
 [![MPL](https://img.shields.io/github/license/alicerunsonfedora/fira)](LICENSE.txt)
 ![Python](https://img.shields.io/badge/python-2.7+-blue.svg)
 [![PyPI version](https://badge.fury.io/py/uvn-fira.svg)](https://pypi.org/project/uvn-fira)
+![Tests](https://github.com/UnscriptedVN/fira/workflows/Tests/badge.svg)
 
 ## Requirements
 
