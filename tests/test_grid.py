@@ -31,13 +31,17 @@ def test_data_size():
 def test_data_grid():
     """Test that the data can successfully return a grid."""
     data = cr.CSWorldDataGenerator(DUMMY_DATA)
-    print(data)
     assert isinstance(data.to_grid(), cr.CSGrid)
 
 def test_data_grid_walls():
     """Test that the data successfully captures all of the walls."""
     data = cr.CSWorldDataGenerator(DUMMY_DATA).walls().as_list()
     assert len(data) == 12
+
+def test_data_grid_coins():
+    """Test that the data successfully captures all of the coins."""
+    data = cr.CSWorldDataGenerator(DUMMY_DATA).coins().as_list()
+    assert len(data) == 1
 
 def test_data_grid_locate_player():
     """Test that the data can successfully get the player's location."""

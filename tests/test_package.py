@@ -10,9 +10,7 @@
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at https://mozilla.org/MPL/2.0/.
 #
-
 """This module contains the tests for the Fira package."""
-
 from uvn_fira import __version__ as __fver, api
 
 def test_version_matches():
