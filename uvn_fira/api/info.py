@@ -12,7 +12,7 @@
 #
 """The info submodule contains the utilities to get the world and player information for a given
     level."""
-
+from os import path
 from .player import CSPlayer
 from .world import CSWorld
 from ..core import CSWorldConfigReader
@@ -39,11 +39,11 @@ def get_level_information(level, fn_path="", **kwargs):
         info (tuple): A tuple containing the `minigame.api.player.CSPlayer` object and the
             `minigame.api.world.CSWorld` object
     """
-    conf = kwargs["config_file"] + "/level%s.toml" % (toml) \
+    conf = path.join(kwargs["config_file"], ("level%s.toml" % (level))) \
         if "config_file" in kwargs \
-            else "core/minigame/levels/level%s.toml" % (level)
+            else path.join("core", "src", "minigame", "levels", ("level%s.toml" % (level)))
     w_info = CSWorldConfigReader(conf, **kwargs)
-    writer = CSNadiaVMWriter(fn_path + "/compiled/adv_lvl%s.nvm" % (level))
+    writer = CSNadiaVMWriter(path.join(fn_path, "compiled", ("adv_lvl%s.nvm" % (level)))
     world = CSWorld(from_data=w_info.data)
     player = CSPlayer(in_world=world, vm=writer)
     return player, world

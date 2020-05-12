@@ -11,8 +11,15 @@
 # file, You can obtain one at https://mozilla.org/MPL/2.0/.
 #
 
-"""The `uvn_fira` package contains all of the source code for the Unscripted minigame."""
+"""The `uvn_fira` package contains the API and core modules for the Fira backend.
+
+Fira is the main backend and API code for the minigame in Unscripted, a visual novel about
+    software development. Fira provides many facets of the minigame, including a public API that
+    players can use to code solutions to the minigame puzzles, a configuration and data generator
+    from level files, and a virtual machine that runs low-level code that the minigame processes
+    (NadiaVM). Fira is named after Fira Sans, one of the game's characters.
+"""
 from uvn_fira.api import *
 from uvn_fira.core import *
 
-__version__ = "1.2.11"
+__version__ = "1.3.1"
