@@ -10,7 +10,7 @@ jobs:
       matrix:
         pyversions:
           - '2.7.18'
-          - '3.8.2'
+          - '3.8.5'
     steps:
       - name: Clone source
         uses: actions/checkout@v1
