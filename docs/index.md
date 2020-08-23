@@ -7,19 +7,12 @@ nav_order: 1
 # The minigame backend for Unscripted
 
 <div class="code-example">
-
-
-###### Preview the new Fira
-
-The new Unscripted Documentation Center provides the latest documentation for the upcoming versions of Fira and will be the new location for all Fira documentation.
-
-<span class="fs-3">
-
-[Visit now](https://docs.unscriptedvn.dev/fira/){: .btn .btn-purple}
-
+<h6>Preview the new Fira</h6>
+<p>The new Unscripted Documentation Center provides the latest documentation for the upcoming versions of Fira and will be the new location for all Fira documentation.</p>
+<p><span class="fs-3">
+<a href="https://docs.unscriptedvn.dev/fira/" class="btn btn-purple">Visit now</a>
 </span>
-
-
+</p>
 </div>
 
 **Fira** is the main backend and API code for the minigame in [Unscripted](https://unscripted.marquiskurt.net), a visual novel about software development. Fira provides many facets of the minigame, including a public API that players can use to code solutions to the minigame puzzles, a configuration and data generator from level files, and a virtual machine that runs low-level code that the minigame processes.
