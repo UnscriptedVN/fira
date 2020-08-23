@@ -8,6 +8,7 @@ nav_order: 1
 
 <div class="code-example">
 
+
 ###### Preview the new Fira
 
 The new Unscripted Documentation Center provides the latest documentation for the upcoming versions of Fira and will be the new location for all Fira documentation.
@@ -17,6 +18,7 @@ The new Unscripted Documentation Center provides the latest documentation for th
 [Visit now](https://docs.unscriptedvn.dev/fira/){: .btn .btn-purple}
 
 </span>
+
 
 </div>
 
