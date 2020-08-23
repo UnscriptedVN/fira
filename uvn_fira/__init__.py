@@ -27,4 +27,4 @@ The `core` submodule contains the backend utilities such as the virtual machine 
 from uvn_fira.api import *
 from uvn_fira.core import *
 
-__version__ = "2.0.0-beta1"
+__version__ = "2.0.0"

@@ -14,6 +14,7 @@
 import os
 from uvn_fira.core import vm
 
+
 def test_vm_write():
     """Test that the VM writer will write a NadiaVM file."""
     wrt = vm.CSNadiaVMWriter("test.nvm")
@@ -22,6 +23,7 @@ def test_vm_write():
     wrt.add()
     wrt.write()
     assert os.path.isfile("test.nvm")
+
 
 def test_vm_write_not_blank():
     """Test that the VM writer will write a NadiaVM file."""
@@ -38,6 +40,7 @@ add
     with open("test.nvm", 'r') as file_obj:
         assert file_obj.read() == file
 
+
 def test_vm_read_file():
     """Test that the VM reader can read a file."""
     wrt = vm.CSNadiaVMWriter("test.nvm")
@@ -46,23 +49,19 @@ def test_vm_read_file():
     wrt.add()
     wrt.write()
 
-    read = vm.CSNadiaVM("test.nvm", (-1, -1))
+    read = vm.CSNadiaVM(path="test.nvm", player_origin=(-1, -1))
     assert isinstance(read, vm.CSNadiaVM)
+
 
 def test_vm_execute():
     """Test that the VM reader executes a set of instructions."""
-    wrt = vm.CSNadiaVMWriter("test.nvm")
-    wrt.set(5)
-    wrt.set(10)
-    wrt.add()
-    wrt.write()
+    test_vm = vm.CSNadiaVM(interactive=True)
 
-    read = vm.CSNadiaVM("test.nvm", (-1, -1))
+    for ins in ["set constant 10", "set constant 5", "add"]:
+        test_vm.input(ins)
 
-    while read.has_more_instructions():
-        read.next()
+    assert 15 in test_vm.get_vm_stack()
 
-    assert 15 in read._stack
 
 def test_vm_player_move():
     """Test that the VM reader sets the player's position correctly."""
@@ -70,6 +69,6 @@ def test_vm_player_move():
     wrt.move("east")
     wrt.write()
 
-    read = vm.CSNadiaVM("test.nvm", (0, 0))
+    read = vm.CSNadiaVM(path="test.nvm", player_origin=(0, 0))
     read.next()
-    assert read.pos() == (0, 1)
+    assert read.get_position() == (0, 1)

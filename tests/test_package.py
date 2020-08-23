@@ -15,7 +15,7 @@ from uvn_fira import __version__ as __fver, api
 
 def test_version_matches():
     """Test that the version matches correctly."""
-    assert __fver == "1.3.1"
+    assert __fver == "2.0.0"
 
 def test_module_import():
     """Test that the API module was imported."""
