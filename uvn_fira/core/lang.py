@@ -157,7 +157,7 @@ class CSNadiaLanguageInstruction(object):
     parameters = []                             # type: List[Any]
 
     def __init__(self, command, params=[]):
-        # type: (CSNadiaLanguageInstruction, CSNadiaLanguageCommand, List[Any]) -> None
+        # type: (CSNadiaLanguageCommand, List[Any]) -> None
         self.command = command      # type: CSNadiaLanguageCommand
         self.parameters = params    # type: List[Any]
 
@@ -181,7 +181,7 @@ class CSNadiaLanguageToken(object):
     contents = "; Example"  # type: str
 
     def __init__(self, type, content):  # pylint:disable=redefined-builtin
-        # type: (CSNadiaLanguageToken, CSNadiaLanguageTokenType, str) -> None
+        # type: (CSNadiaLanguageTokenType, str) -> None
         self.type = type  # type: CSNadiaLanguageTokenType
         self.contents = content  # type: str
 
@@ -198,7 +198,7 @@ class CSNadiaLanguageToken(object):
 
     @property
     def castable(self):
-        # type: (CSNadiaLanguageToken) -> Any
+        # type: () -> Any
         """Get a typecasted version of the contents of the token.
 
         Returns:
@@ -251,7 +251,7 @@ class CSNadiaLanguageParser(object):
         return self._stream.pop(0)
 
     def _advance(self):
-        # type: (CSNadiaLanguageParser) -> Optional[Dict[str, Optional[CSNadiaLanguageToken]]]
+        # type: () -> Optional[Dict[str, Optional[CSNadiaLanguageToken]]]
         """Advance the tokens to the next state."""
         prev = self._parsable["previous"]
         curr = self._tokens.pop(0) if self._can_parse else None
@@ -294,7 +294,7 @@ class CSNadiaLanguageParser(object):
                     kwargs["bindings"][binding])
 
     def _next_token(self):
-        # type: (CSNadiaLanguageParser) -> Optional[CSNadiaLanguageToken]
+        # type: () -> Optional[CSNadiaLanguageToken]
         """Generate the next token in the list."""
         state = _CSNadiaLangTokenizerState.START    # type: _CSNadiaLangTokenizerState
         token_type = CSNadiaLanguageTokenType.NONE  # type: CSNadiaLanguageTokenType
