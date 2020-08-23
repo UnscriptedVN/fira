@@ -13,6 +13,7 @@
 """This submodule contains the grid data type used in the minigame world."""
 from typing import Optional, Callable
 
+
 class CSGrid(object):
     """A class representation of a grid.
 
@@ -50,7 +51,8 @@ class CSGrid(object):
     def __str__(self):
         data = ""
         for row in self.grid:
-            data += str(row).replace("[", "").replace("]", "").replace(",", "\t") + "\n"
+            data += str(row).replace("[", "").replace("]",
+                                                      "").replace(",", "\t") + "\n"
         return data
 
     def __eq__(self, value):
@@ -90,7 +92,7 @@ class CSGrid(object):
                     coordinates.append((row, column))
         return coordinates
 
-    def first(self, of=""):     #pylint:disable=invalid-name
+    def first(self, of=""):  # pylint:disable=invalid-name
         # type: (CSGrid, str) -> tuple[int, int]
         """Get the first instance of an item in the grid.
 
@@ -110,7 +112,7 @@ class CSGrid(object):
                     break
         return coords
 
-    def last(self, of=""):      #pylint:disable=invalid-name
+    def last(self, of=""):  # pylint:disable=invalid-name
         # type: (CSGrid, str) -> tuple[int, int]
         """Get the last instance of an item in the grid.
 
@@ -123,11 +125,13 @@ class CSGrid(object):
         """
         inverse = [row[::-1] for row in self.grid][::-1]
         coords = -1, -1
+        row_bound = len(inverse) - 1
+        column_bound = len(self.grid[0]) - 1
 
-        for row in range(len(inverse) - 1):
-            for column in range(len(self.grid[0]) - 1):
+        for row in range(row_bound):
+            for column in range(column_bound):
                 if inverse[row][column] == of:
-                    coords = row, column
+                    coords = row_bound - row, column_bound - column
                     break
 
         return coords

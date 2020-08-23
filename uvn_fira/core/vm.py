@@ -10,14 +10,14 @@
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at https://mozilla.org/MPL/2.0/.
 #
-"""This submodule contains the low-level virtual machine reader for the minigame
-code.
+"""This submodule contains the utilities and classes for the low-level virtual machine for the
+    minigame code, NadiaVM.
 
 ## Implementation
 
-The Unscripted API and the minigame GUI eventually write files readable by the
-Nadia Virtual Machine (NVM). The Nadia Virtual Machine is a stack-based virtual
-machine designed to perform operations specific to the Unscripted minigame.
+The Unscripted API and the minigame GUI eventually write files readable by the Nadia Virtual
+    Machine (NVM). The Nadia Virtual Machine is a stack-based virtual machine designed to
+    perform operations specific to the Unscripted minigame.
 
 ### Commands
 In the NadiaVM, there are several commands:
@@ -29,6 +29,9 @@ In the NadiaVM, there are several commands:
     top of the stack.
 - `set constant (any)`: Set the top of the stack to a constant value.
 - `move player (str)`: Move the player in a given direction.
+- `bind (str) (command)`: Makes an alias of the command to the assigned string.
+- `cast (str) (any)`: Cast the value to the given name. If a value is already cast to the name, the
+    new value will be used instead of the old one.
 - `exit player`: Try to end the execution script and finish the level.
 - `add`: Add the two topmost values on the stack.
 - `sub`: Subtract the two topmost values on the stack.
@@ -37,29 +40,62 @@ In the NadiaVM, there are several commands:
 - `neg`: Negate the topmost value on the stack. Effectively the same as pushing `-1` on the stack
     and calling `mult`.
 """
-from typing import Optional
+from typing import Optional, List, Any, Tuple, Callable, Dict
+from . import lang as language
 
 
 class CSNadiaVMCommandNotFoundError(Exception):
     """VM command not found."""
 
+
 class CSNadiaVM(object):
-    """An implementation of the NadiaVM stack."""
+    """An implementation of the Nadia virtual machine.
 
-    _instructions = []
-    _stack = []
+    Attributes:
+        is_interactive (bool): Whether this VM instance is interactive.
+    """
 
-    def __init__(self, path, pl):
-        # type: (CSNadiaVM, str, tuple[int, int]) -> None
-        """Construct the VM reader.
+    is_interactive = False
+    _instructions = []  # type: List[str]
+    _parsed_instructions = []  # type: List[language.CSNadiaLanguageInstruction]
+    _stack = []  # type: List[Any]
+    _casts = {}  # type: Dict[str, Any]
+    _binds = {}  # type: Dict[str, language.CSNadiaLanguageCommand]
+    _player_pos = (0, 0)  # type: Tuple[int, int]
 
-        Arguments:
-            path (str): The path to the compiled NadiaVM file (`.nvm`) to read from.
-            pl (tuple): The coordinates of the player.
+    def __init__(self, **kwargs):
+        # type: (CSNadiaVM, dict) -> None
+        """Initialize the virtual machine.
+
+        If a filepath is provided, the virtual machine will populate its instruction queue with
+            the instructions written in the command file and attempt to parse the data into valid
+            commands for the machine to execute.
+
+        Args:
+            **kwargs (dict): Arbitrary keyword arguments.
+
+        Kwargs:
+            path (str): A path to a NadiaVM file (`.nvm`) to read from.
+            player_origin (tuple): The coordinates of the player. Defaults to (0, 0).
+            interactive (bool): Whether this VM instance is interactive. Defaults to False.
         """
-        with open(path, 'r') as vm_file:
-            self._instructions = list(filter(lambda a: a, vm_file.read().split("\n")))
-        self._player_pos = pl
+        self._stack = []
+        self._casts = {}
+        self._binds = {}
+
+        if "path" in kwargs:
+            with open(kwargs["path"], 'r') as vm_file:
+                source = vm_file.read()
+                self._instructions = [a for a in source.split("\n") if a]
+                self._parsed_instructions = language.CSNadiaLanguageParser(
+                    source).parse()
+        else:
+            self._instructions = []
+            self._parsed_instructions = []
+
+        self._player_pos = kwargs["player_origin"] if "player_origin" in kwargs else (
+            0, 0)
+        self.is_interactive = kwargs["interactive"] if "interactive" in kwargs else False
 
     def has_more_instructions(self):
         # type: (CSNadiaVM) -> bool
@@ -68,7 +104,7 @@ class CSNadiaVM(object):
         Returns:
             more (bool): Boolean that will be True if there are more instructions, False otherwise.
         """
-        return len(self._instructions) > 0
+        return len(self._parsed_instructions) > 0
 
     def preview_next_instruction(self):
         # type: (CSNadiaVM) -> Optional[str]
@@ -78,10 +114,62 @@ class CSNadiaVM(object):
             command (str): The command to be executed, excluding parameters, or None if there
                 are no more instructions to execute in the VM.
         """
-        if self.has_more_instructions():
-            return self._instructions[0].split(" ")[0]
-        else:
+        if not self.has_more_instructions():
             return None
+        return self._parsed_instructions[0].command.value
+
+    def get_vm_stack(self):
+        # type: (CSNadiaVM) -> List[Any]
+        """Get the current virtual machine stack.
+
+        Returns:
+            stack (list): A list containing the current representation of the stack.
+        """
+        return self._stack
+
+    def get_namespace(self, name):
+        # type: (CSNadiaVM, str) -> Optional[List[Any]]
+        """Get the specified item in the virtual machine.
+
+        Arguments:
+            name (str): The name of the item to get.
+
+        Returns:
+            array (list): The specified item, or None if it doesn't exist.
+        """
+        if name not in self.__dict__:
+            return None
+        elif not isinstance(self.__dict__[name], list) or not type(self.__dict__[name]) is list:
+            return None
+        listed = self.__dict__[name]  # type: List[Any]
+        return listed
+
+    def get_position(self):
+        # type: (CSNadiaVM) -> tuple[int, int]
+        """Get the current player position from the VM execution stack.
+
+        Returns:
+            player (tuple): A tuple containing the coordinates of the player.
+        """
+        return self._player_pos
+
+    def get_binding(self, name):
+        # type: (CSNadiaVN) -> Optional[language.CSNadiaLanguageCommand]
+        """Get the associated command bound to a given name.
+
+        Arguments:
+            name (str): The name to look up the binding for.
+
+        Returns:
+            command (str): The associated command, or None if no bindings exist.
+        """
+        return self._binds.get(name, None)
+
+    def clear(self):
+        # type: (CSNadiaVM) -> None
+        """Clear all existing instructions, both parsed and unparsed."""
+        self._instructions = []
+        self._parsed_instructions = []
 
     def next(self):
         # type: (CSNadiaVM) -> None
@@ -90,35 +178,89 @@ class CSNadiaVM(object):
         Raises:
             error (CSNadiaVMCommandNotFoundError): Command not found.
         """
-        current = self._instructions.pop(0).split(" ")
+        self._parse_all()
+
+        current = self._parsed_instructions[0]
+        command = ""
+        dummy_func = lambda *_, **__: None
 
         instruct = {
             "alloc": self._alloc,
             "push": self._push,
-            "pop" : self._pop,
+            "pop": self._pop,
             "set": self._set,
             "move": self._move,
+            "bind": self._bind,
+            "cast": self._cast,
             "add": self._add,
             "sub": self._sub,
             "mult": self._mult,
             "div": self._div,
             "neg": self._neg,
-            "exit": "NOCOMM",
-            "collect": "NOCOMM",
-        }
+            "exit": dummy_func,
+            "collect": dummy_func,
+        }  # type: dict[str, Callable]
 
-        if current[0] not in instruct:
-            raise CSNadiaVMCommandNotFoundError("Invalid command: '%s'" % (current[0]))
+        for cast in self._casts:
+            if cast not in current.parameters:
+                continue
+            if current.command == language.CSNadiaLanguageCommand.CAST:
+                continue
+            if current.command == language.CSNadiaLanguageCommand.SET\
+                    and current.parameters.index(cast) == 0:
+                continue
+            while cast in current.parameters:
+                current.parameters[current.parameters.index(
+                    cast)] = self._casts[cast]
 
-        command = instruct.get(current[0])
-        if current[0] in ["alloc", "push", "pop"]:
-            command(current[1], int(current[2]))
-        elif current[0] in ["set", "move"]:
-            command(current[2])
-        elif current[0] in ["add", "sub", "mult", "div", "neg"]:
-            command()
+        command = instruct.get(current.command.value, dummy_func)
+        if current.command in [
+                language.CSNadiaLanguageCommand.ALLOC,
+                language.CSNadiaLanguageCommand.PUSH,
+                language.CSNadiaLanguageCommand.POP,
+                language.CSNadiaLanguageCommand.BIND,
+                language.CSNadiaLanguageCommand.CAST,
+                language.CSNadiaLanguageCommand.SET,
+        ]:
+            command(current.parameters[0], current.parameters[1])
+        elif current.command in [
+                language.CSNadiaLanguageCommand.MOVE,
+        ]:
+            command(current.parameters[len(current.parameters) - 1])
         else:
-            pass
+            command()
+
+    def input(self, command):
+        # type: (CSNadiaVM, str) -> Optional[any]
+        """Run the specified command in the virtual machine.
+
+        If the virtual machine is set to interactive, then the command will be inserted in the
+            front of the queue and be executed immediately. Otherwise, the function will return
+            immediately.
+
+        Args:
+            command (str): The command to add to the virutal machine's instruction queue
+                and execute.
+
+        Returns:
+            top (any): The top of the current stack, or None if the command failed.
+        """
+        if not self.is_interactive:
+            return None
+        self._instructions.insert(0, command + "\n")
+        self.next()  # pylint:disable=not-callable
+        self._instructions.pop(0)
+        if not self._stack:
+            return None
+        return self._stack[len(self._stack) - 1]
+
+    def _parse_all(self):
+        """Parse all of the available commands."""
+        if self._instructions:
+            source = "\n".join(self._instructions)
+            parser = language.CSNadiaLanguageParser(
+                source, bindings=self._binds.copy())
+            self._parsed_instructions = parser.parse()
 
     def _alloc(self, name, size):
         """Allocate a space of memory for a given array.
@@ -127,15 +269,22 @@ class CSNadiaVM(object):
             name (str): The name of the array to allocate space for.
             size (int): The size of the array. Defaults to 1.
         """
-        self.__dict__[name] = [None for x in range(size)]
+        self.__dict__[name] = [None for _ in range(size)]
 
-    def _set(self, value):
+    def _set(self, target=language.CSNadiaLanguageKeyword.CONSTANT, value=0):
         """Set the top of the stack to a constant value.
 
         Arguments:
+            target (CSNadiaLanguageKeyword | str): The target to set the value for.
             value (any): The value to create a constant for.
         """
-        self._stack.append(value)
+        if isinstance(target, language.CSNadiaLanguageKeyword)\
+                and target == language.CSNadiaLanguageKeyword.CONSTANT:
+            self._stack.append(value)
+        elif isinstance(target, str) and target in self._casts:
+            self._casts[target] = value
+        else:
+            pass
 
     def _push(self, name, index):
         """Push the top-most item on the current stack to the given array.
@@ -170,9 +319,39 @@ class CSNadiaVM(object):
             "east": (0, 1)
         }
 
-        trans_x, trans_y = transforms.get(direction, "east")
+        trans_x, trans_y = transforms.get(direction, transforms["east"])
         curr_x, curr_y = self._player_pos
         self._player_pos = curr_x + trans_x, curr_y + trans_y
+
+    def _bind(self, name, command):
+        """Bind the following name to a command.
+
+        Arguments:
+            name (str): The name to bind a command to.
+            command (language.CSNadiaLanguageCommand): The command to bind the name to.
+        """
+        if name not in self._binds:
+            self._binds[name] = command
+
+    def _cast(self, name, value):
+        """Cast the value to a name.
+
+        Arguments:
+            name (str): The name to cast the value to.
+            value (str): The value to cast the name to.
+        """
+        if name not in language.CSNadiaLanguageParser.reserved():
+            self._casts[name] = value
+
+    def _bind(self, name, command):
+        """Bind the following name to a command.
+
+        Arguments:
+            name (str): The name to bind a command to.
+            command (str): The command to bind the name to.
+        """
+        if name not in self._binds:
+            self._binds[name] = language.CSNadiaLanguageCommand(command)
 
     def _add(self):
         """Add the two topmost values on the stack."""
@@ -206,27 +385,6 @@ class CSNadiaVM(object):
         self._stack.append(-1)
         self._mult()
 
-    def get(self, name):
-        # type: (CSNadiaVM, str) -> Optional[list]
-        """Get the specified item in the virtual machine.
-
-        Arguments:
-            name (str): The name of the item to get.
-
-        Returns:
-            array (list): The specified item, or None if it doesn't exist.
-        """
-        return self.__dict__[name] if name in self.__dict__ \
-            and type(self.__dict__[name]) is list else None #pylint:disable=unidiomatic-typecheck
-
-    def pos(self):
-        # type: (CSNadiaVM) -> tuple[int, int]
-        """Get the current player position from the VM execution stack.
-
-        Returns:
-            player (tuple): A tuple containing the coordinates of the player.
-        """
-        return self._player_pos
 
 class CSNadiaVMWriterBuilder(object):
     """An list-based implementation of the NadiaVM file writer.
@@ -256,6 +414,12 @@ class CSNadiaVMWriterBuilder(object):
         for instruction in self.instructions:
             string += "%s\n" % (instruction)
         return string
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, type, value, traceback):
+        self.write()
 
     def alloc(self, array_name, size=1):
         # type: (CSNadiaVMWriterBuilder, str, int) -> None
@@ -305,6 +469,26 @@ class CSNadiaVMWriterBuilder(object):
             direction (str): The direction the player will move in.
         """
         self.instructions.append("move player " + direction + "\n")
+
+    def bind(self, name, command):
+        # type: (CSNadiaVMWriterBuilder, str, str) -> None
+        """Bind the following name to a command.
+
+        Arguments:
+            name (str): The name to bind a command to.
+            command (str): The command to bind the name to.
+        """
+        self.instructions.append("bind %s %s\n" % (name, command))
+
+    def cast(self, name, value):
+        # type: (CSNadiaVMWriterBuilder, str, Any) -> None
+        """Cast the value to a name.
+
+        Arguments:
+            name (str): The name to cast the value to.
+            value (str): The value to cast the name to.
+        """
+        self.instructions.append("bind %s %s\n" % (name, value))
 
     def collect(self):
         # type: (CSNadiaVMWriterBuilder) -> None
@@ -365,6 +549,7 @@ class CSNadiaVMWriterBuilder(object):
                 self.instructions.pop()     # Pops the push statement.
                 self.instructions.pop()     # Pops the pop statement.
 
+
 class CSNadiaVMWriter(object):
     """An implementation of the NadiaVM file writer."""
 
@@ -381,6 +566,12 @@ class CSNadiaVMWriter(object):
 
     def __str__(self):
         return "Filepath: " + self.path + "\n" + self.code
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, type, value, traceback):
+        self.write()
 
     def alloc(self, array_name, size=1):
         # type: (CSNadiaVMWriter, str, int) -> None
@@ -430,6 +621,26 @@ class CSNadiaVMWriter(object):
             direction (str): The direction the player will move in.
         """
         self.code += "move player " + direction + "\n"
+
+    def bind(self, name, command):
+        # type: (CSNadiaVMWriter, str, str) -> None
+        """Bind the following name to a command.
+
+        Arguments:
+            name (str): The name to bind a command to.
+            command (str): The command to bind the name to.
+        """
+        self.code += "bind %s %s\n" % (name, command)
+
+    def cast(self, name, value):
+        # type: (CSNadiaVMWriter, str, Any) -> None
+        """Cast the value to a name.
+
+        Arguments:
+            name (str): The name to cast the value to.
+            value (str): The value to cast the name to.
+        """
+        self.code += "bind %s %s\n" % (name, value)
 
     def collect(self):
         # type: (CSNadiaVMWriter) -> None

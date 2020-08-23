@@ -20,4 +20,4 @@ from .grid import *
 from .template import *
 from .vm import *
 
-__version__ = "1.2.0"
+__version__ = "2.0.0-beta1"

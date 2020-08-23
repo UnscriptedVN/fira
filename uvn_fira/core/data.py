@@ -12,10 +12,13 @@
 #
 """This submodule contains the world data generator code for the configuration system."""
 
+import warnings
 from .grid import CSGrid
+
 
 class CSWorldDataGenerateError(Exception):
     """Could not generate the world data."""
+
 
 class CSWorldDataGenerator(object):
     """The base class for the world data generator for world maps.
@@ -49,7 +52,8 @@ class CSWorldDataGenerator(object):
             "%": "WALL",
             "P": "PLAYER",
             "E": "EXIT",
-            ".": "COIN"
+            ".": "DESK",
+            "X": "VOID"
         }
 
         for line in data:
@@ -64,7 +68,8 @@ class CSWorldDataGenerator(object):
 
                 if current_tile == "EXIT":
                     if did_set_exit:
-                        raise CSWorldDataGenerateError("Cannot instantiate more than one exit.")
+                        raise CSWorldDataGenerateError(
+                            "Cannot instantiate more than one exit.")
 
                 if current_tile == "PLAYER":
                     if did_set_player:
@@ -73,7 +78,8 @@ class CSWorldDataGenerator(object):
                                                        % (player_position,
                                                           (total_rows, current_column)))
 
-                    self._player_position = len(world_matrix), current_column - 1
+                    self._player_position = len(
+                        world_matrix), current_column - 1
 
                 if total_rows == 0:
                     total_columns += 1
@@ -107,10 +113,23 @@ class CSWorldDataGenerator(object):
         # type: (CSWorldDataGenerator) -> CSGrid
         """Get the world coin data.
 
+        This is deprecated in favor of CSGrid.devices.
+
         Returns:
             grid (CSGrid): The world grid containing the coins.
         """
-        return CSGrid(self._data, grid_filter=lambda x: x == "COIN")
+        warnings.warn(
+            "CSGrid.coins is deprecated in favor of CSGrid.devices.", DeprecationWarning)
+        return self.devices()
+
+    def devices(self):
+        # type: (CSWorldDataGenerator) -> CSGrid
+        """Get the world's data for all desks with unpowered devices.
+
+        Returns:
+            grid (CSGrid): The world grid containing unpowered devices.
+        """
+        return CSGrid(self._data, grid_filter=lambda x: x == "DESK")
 
     def walls(self):
         # type: (CSWorldDataGenerator) -> CSGrid

@@ -14,12 +14,13 @@
     a minigame world.
 
 The module contains a class that lets players control the behavior of their minigame counterpart
-    by moving in a given direction, collecting an item, etc. (`CSPlayer`). To prevent accidental
+    by moving in a given direction, powering on a device, etc. (`CSPlayer`). To prevent accidental
     manipulation of the original world data, the player class uses its own position property to
     update its location.
 """
 from .world import CSWorld
 from ..core import CSNadiaVMWriter
+
 
 class CSPlayer(object):
     """The base class for a player in the minigame world.
@@ -31,6 +32,8 @@ class CSPlayer(object):
     _inventory = []
     _world = None
     _world_coins = []
+    _world_devices = 0
+    _current_device_count = 0
     _vm = None
 
     def __init__(self, in_world, **kwargs):
@@ -38,24 +41,29 @@ class CSPlayer(object):
         """Construct the Player object.
 
         Arguments:
-            in_world (minigame.api.world.CSWorld): The world the player is located in.
+            in_world (uvn_fira.api.world.CSWorld): The world the player is located in.
             **kwargs (dict): Arbitrary keyword arguments.
 
         Kwargs:
             at_position (tuple): The position the player should be placed in. Defaults to the player
-                position in the world (`minigame.api.world.CSWorld.player`).
+                position in the world (`uvn_fira.api.world.CSWorld.player`).
             with_inv (list): A list containing items that the player will have to start. Defaults to
                 an empty list.
-            vm: The virtual machine writer, if available.
+            vm (CSNadiaVMWriter): The virtual machine writer, if available.
         """
         if not isinstance(in_world, CSWorld):
             raise TypeError("Expected a minigame world type but received %s instead."
                             % (type(in_world)))
         self._world = in_world
-        self._world_coins = self._world.coins().as_list()[:]
+        self._world_coins = self._world.devices().as_list()[:]
 
-        self._position = kwargs['at_position'] if "at_position" in kwargs else self._world.player()
+        self._world_devices = len(self._world.devices().as_list()[:])
+
+        self._position = kwargs['at_position'] if "at_position" in kwargs else self._world.player(
+        )
         self._inventory = kwargs['with_inv'] if "with_inv" in kwargs else []
+        self._current_device_count = len(
+            kwargs["with_inv"]) if "with_inv" in kwargs else 0
 
         if "vm" in kwargs:
             self._vm = kwargs["vm"]
@@ -86,12 +94,12 @@ class CSPlayer(object):
 
     def capacity(self):
         # type: (CSPlayer) -> int
-        """Get the the count of how many items the player has.
+        """Get the the count of how many devices the player has turned on.
 
         Returns:
-            count (int): The number of items in the inventory.
+            count (int): The number of devices that powered on.
         """
-        return len(self._inventory)
+        return self._current_device_count
 
     def blocked(self):
         # type: (CSPlayer) -> bool
@@ -100,7 +108,7 @@ class CSPlayer(object):
         Returns:
             blocked (bool): True if any walls are near the player (1-block radius).
         """
-        px, py = self._position #pylint:disable=invalid-name
+        px, py = self._position  # pylint:disable=invalid-name
 
         positions = [(px-1, py), (px+1, py), (px, py-1), (px, py+1)]
 
@@ -141,12 +149,12 @@ class CSPlayer(object):
 
         return self
 
-    def collect(self):
+    def _manage_collected_state(self):
         # type: (CSPlayer) -> CSPlayer
-        """Add an item into the player's inventory at the player's current position.
+        """Manage the device collection state and determine whether to increase the powered on
+        device count.
 
-        If the item does not exist in the world, or the player already has the item in question,
-            nothing occurs.
+        If the device is already on or there isn't a device there, nothing occurs.
 
         Returns:
             player (CSPlayer): The Player object that committed the collect action. This is useful
@@ -154,6 +162,9 @@ class CSPlayer(object):
         """
         item_index = self._world_coins.index(self._position)
         self._inventory.append(self._position)
+
+        if self._position in self._world_coins and self._position not in self._inventory:
+            self._current_device_count += 1
 
         if self._vm:
             self._vm.pop("world_coins", item_index)
@@ -163,12 +174,23 @@ class CSPlayer(object):
         self._world_coins[item_index] = None
         return self
 
-    def exit(self):
-        # type: (CSPlayer) -> None
-        """Exit the level, if possible.
+    def toggle(self):
+        # type: (CSPlayer) -> CSPlayer
+        """Turn a nearby computer on or off.
 
-        If a VM is specified, the VM writer will also close the writer by writing to the VM file.
+        .. versionadded:: 2.0.0-beta1
+
+        If there isn't a device to turn on, nothing occurs.
+
+        Returns:
+            player (CSPlayer): The Player object that committed the collect action. This is useful
+                in cases where chaining methods is preferred.
         """
-        if self._vm:
+        return self._manage_collected_state()
+
+    def finish(self):
+        # type: (CSPlayer) -> None
+        """Finish all instructions and compile the VM code."""
+        if self._vm and isinstance(self._vm, CSNadiaVMWriter):
             self._vm.exit()
             self._vm.write()
