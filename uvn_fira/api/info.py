@@ -14,14 +14,15 @@
     level."""
 from os import path
 import warnings
+from typing import Tuple, Union
 from .player import CSPlayer
 from .world import CSWorld
 from .vm import CSMinigameWriter
-from ..core import CSWorldConfigReader
+from ..core import CSWorldConfigReader, CSWorldDataGenerator
 
 
 def get_level_information(level, fn_path="", **kwargs):
-    # type: (int, str, dict) -> tuple[CSPlayer, CSWorld]
+    # type: (int, str, dict) -> Tuple[CSPlayer, CSWorld]
     """Create a world and player based on a game level.
 
     .. WARNING::
@@ -91,7 +92,7 @@ class MinigameLevel():
     _config_path = ""
 
     def __init__(self, level, vm_path, provide_config=False, **kwargs):
-        # type: (MinigameLevel, int, str, bool, dict) -> None
+        # type: (int, str, bool, dict) -> None
         """Initialize a minigame level reader.
 
         Args:
@@ -120,7 +121,7 @@ class MinigameLevel():
         self._config_reader = CSWorldConfigReader(self._config_path, **kwargs)
 
     def __enter__(self):
-        # type: (MinigameLevel) -> Tuple[CSNadiaVMWriter, CSWorldConfigReader | None]
+        # type: () -> Tuple[CSMinigameWriter, Union[CSWorldDataGenerator, None]]
         """Enter the file context for the minigame level reader."""
         return self.startfile()
 
@@ -129,7 +130,7 @@ class MinigameLevel():
         self.close()
 
     def startfile(self):
-        # type: (MinigameLevel) -> Tuple[CSNadiaVMWriter, CSWorldConfigReader | None]
+        # type: () -> Tuple[CSMinigameWriter, Union[CSWorldDataGenerator, None]]
         """Start the writing process.
 
         Returns:
