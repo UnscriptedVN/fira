@@ -19,17 +19,18 @@ The world grid is a two-dimensional array (list of lists) that contain strings t
     utilities to manage it. The grid implementation is not dependent on the `numpy` library and is
     geared towards accessing elements and other information, rather than mathematical operations.
 """
-from typing import Callable, Optional
+from typing import Callable, Optional, Any, Tuple
 
 from ..core import CSGrid
 
 # To expose the documentation for the grid without exposing the core, a subclassed version is
 # created here. pdoc will automatically use the documentation based on class inheritance rules.
 
-class CSWorldGrid(CSGrid):      #pylint:disable=missing-class-docstring
 
-    def __init__(self, grid, filter=None):  #pylint:disable=redefined-builtin
-        # type: (CSWorldGrid, list, Optional[Callable[[any], any]]) -> None
+class CSWorldGrid(CSGrid):  # pylint:disable=missing-class-docstring
+
+    def __init__(self, grid, filter=None):  # pylint:disable=redefined-builtin
+        # type: (list, Optional[Callable[[Any], Any]]) -> None
         CSGrid.__init__(self, grid, filter)
 
     def __str__(self):
@@ -42,21 +43,21 @@ class CSWorldGrid(CSGrid):      #pylint:disable=missing-class-docstring
         return CSGrid.__ne__(self, value)
 
     def shape(self):
-        # type: (CSWorldGrid) -> tuple[int, int]
+        # type: () -> Tuple[int, int]
         return CSGrid.shape(self)
 
     def as_list(self):
-        # type: (CSWorldGrid) -> list[any]
+        # type: () -> list[Any]
         return CSGrid.as_list(self)
 
     def first(self, of=""):
-        # type: (CSWorldGrid, str) -> any
+        # type: (str) -> Any
         return CSGrid.first(self, of)
 
     def last(self, of=""):
-        # type: (CSWorldGrid, str) -> any
+        # type: (str) -> Any
         return CSGrid.last(self, of)
 
     def element_at(self, row, column):
-        # type: (CSWorldGrid, int, int) -> any
+        # type: (int, int) -> Any
         return CSGrid.element_at(self, row, column)

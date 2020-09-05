@@ -50,7 +50,7 @@ with MinigameLevel(
     provide_config=True,
     config_file="core/src/minigame/levels/level%s.toml",
     exists=renpy.loadable,
-    load=renpy.exports.file) as vm, lvl:
+    load=renpy.exports.file) as (vm, lvl):
     # Write your VM commands here. The file will automatically close when exiting this block.
 
 """ % (for_level, for_level, for_level, for_level)
