@@ -18,6 +18,7 @@ The module contains a class that lets players control the behavior of their mini
     manipulation of the original world data, the player class uses its own position property to
     update its location.
 """
+from typing import Tuple, Optional, List
 from .world import CSWorld
 from ..core import CSNadiaVMWriter
 
@@ -28,16 +29,16 @@ class CSPlayer(object):
     The player object contains methods for manipulating the current player's
         position and inventory system.
     """
-    _position = (0, 0)
-    _inventory = []
-    _world = None
-    _world_coins = []
+    _position = (0, 0)  # type: Tuple[int, int]
+    _inventory = []  # type: List[Tuple[int, int]]
+    _world = None  # type: Optional[CSWorld]
+    _world_coins = []  # type: List[Optional[Tuple[int, int]]]
     _world_devices = 0
     _current_device_count = 0
-    _vm = None
+    _vm = None  # type: Optional[CSNadiaVMWriter]
 
     def __init__(self, in_world, **kwargs):
-        # type: (CSPlayer, CSWorld, dict) -> None
+        # type: (CSWorld, dict) -> None
         """Construct the Player object.
 
         Arguments:
@@ -75,7 +76,7 @@ class CSPlayer(object):
                 self._vm.push("world_coins", self._world_coins.index(coin))
 
     def location(self):
-        # type: (CSPlayer) -> tuple[int, int]
+        # type: () -> Tuple[int, int]
         """Get the player's current position.
 
         Returns:
@@ -84,7 +85,7 @@ class CSPlayer(object):
         return self._position
 
     def origin(self):
-        # type: (CSPlayer) -> tuple[int, int]
+        # type: () -> Tuple[int, int]
         """Get the original starting position of the player.
 
         Returns:
@@ -93,7 +94,7 @@ class CSPlayer(object):
         return self._world.player()
 
     def capacity(self):
-        # type: (CSPlayer) -> int
+        # type: () -> int
         """Get the the count of how many devices the player has turned on.
 
         Returns:
@@ -102,7 +103,7 @@ class CSPlayer(object):
         return self._current_device_count
 
     def blocked(self):
-        # type: (CSPlayer) -> bool
+        # type: () -> bool
         """Determine whether a player is blocked at a given position.
 
         Returns:
@@ -118,7 +119,7 @@ class CSPlayer(object):
         return False
 
     def move(self, direction):
-        # type: (CSPlayer, str) -> CSPlayer
+        # type: (str) -> 'CSPlayer'
         """Move the player in a direction, if the direction results in the player
             being able to move into a non-walled area.
 
@@ -150,7 +151,7 @@ class CSPlayer(object):
         return self
 
     def _manage_collected_state(self):
-        # type: (CSPlayer) -> CSPlayer
+        # type: () -> 'CSPlayer'
         """Manage the device collection state and determine whether to increase the powered on
         device count.
 
@@ -175,7 +176,7 @@ class CSPlayer(object):
         return self
 
     def toggle(self):
-        # type: (CSPlayer) -> CSPlayer
+        # type: () -> 'CSPlayer'
         """Turn a nearby computer on or off.
 
         .. versionadded:: 2.0.0-beta1
@@ -189,7 +190,7 @@ class CSPlayer(object):
         return self._manage_collected_state()
 
     def finish(self):
-        # type: (CSPlayer) -> None
+        # type: () -> None
         """Finish all instructions and compile the VM code."""
         if self._vm and isinstance(self._vm, CSNadiaVMWriter):
             self._vm.exit()

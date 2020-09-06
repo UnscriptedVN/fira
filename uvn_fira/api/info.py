@@ -54,7 +54,7 @@ def get_level_information(level, fn_path="", **kwargs):
     conf = path.join("core", "src", "minigame",
                      "levels", "level%s.toml" % (level))
     if "config" in kwargs:
-        conf = kwargs["config"]
+        conf = str(kwargs["config"])
     w_info = CSWorldConfigReader(conf, **kwargs)
     writer = CSMinigameWriter(
         path.join(fn_path, "compiled", ("adv_lvl%s.nvm" % (level))))
@@ -116,7 +116,7 @@ class MinigameLevel():
             "core", "src", "minigame", "levels", "level%s.toml" % (self._level_number))
 
         if "config_file" in kwargs:
-            self._config_path = kwargs["config_file"]
+            self._config_path = str(kwargs["config_file"])
 
         self._config_reader = CSWorldConfigReader(self._config_path, **kwargs)
 

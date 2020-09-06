@@ -44,6 +44,7 @@ In the NadiaVM, there are several commands that players can use:
 The VM writer presented here provides abstracted versions of these commands that will be written to
     the requested path.
 """
+from typing import Any
 from ..core import CSNadiaVMWriter
 
 # To expose the documentation for the grid without exposing the core, a subclassed version is
@@ -81,7 +82,7 @@ class CSMinigameWriter(CSNadiaVMWriter):
         CSNadiaVMWriter.pop(self, array, index)
 
     def set(self, value):
-        # type: (CSNadiaVMWriter, any) -> None
+        # type: (CSNadiaVMWriter, Any) -> None
         CSNadiaVMWriter.set(self, value)
 
     def move(self, direction):

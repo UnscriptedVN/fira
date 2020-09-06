@@ -355,7 +355,7 @@ class CSNadiaLanguageParser(object):
         return self._tokens
 
     def _parse_command(self):
-        # type: (CSNadiaLanguageParser) -> CSNadiaLanguageInstruction
+        # type: () -> CSNadiaLanguageInstruction
         """Parse a single command and any of its parameters as castable types."""
         command = CSNadiaLanguageCommand.EXIT
         parameters = []
@@ -390,7 +390,7 @@ class CSNadiaLanguageParser(object):
         return instruct
 
     def parse(self):
-        # type: (CSNadiaLanguageParser) -> List[CSNadiaLanguageInstruction]
+        # type: () -> List[CSNadiaLanguageInstruction]
         """Parse the list of tokens into a given list of instructions.
 
         If tokenization has not taken place, this function will try to tokenize the input first.

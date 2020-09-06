@@ -64,7 +64,7 @@ class CSNadiaVM(object):
     _player_pos = (0, 0)  # type: Tuple[int, int]
 
     def __init__(self, **kwargs):
-        # type: (CSNadiaVM, dict) -> None
+        # type: (dict) -> None
         """Initialize the virtual machine.
 
         If a filepath is provided, the virtual machine will populate its instruction queue with
@@ -84,7 +84,7 @@ class CSNadiaVM(object):
         self._binds = {}
 
         if "path" in kwargs:
-            with open(kwargs["path"], 'r') as vm_file:
+            with open(str(kwargs["path"]), 'r') as vm_file:
                 source = vm_file.read()
                 self._instructions = [a for a in source.split("\n") if a]
                 self._parsed_instructions = language.CSNadiaLanguageParser(
@@ -98,7 +98,7 @@ class CSNadiaVM(object):
         self.is_interactive = kwargs["interactive"] if "interactive" in kwargs else False
 
     def has_more_instructions(self):
-        # type: (CSNadiaVM) -> bool
+        # type: () -> bool
         """Determine if the VM has more instructions to execute.
 
         Returns:
@@ -107,7 +107,7 @@ class CSNadiaVM(object):
         return len(self._parsed_instructions) > 0
 
     def preview_next_instruction(self):
-        # type: (CSNadiaVM) -> Optional[str]
+        # type: () -> Optional[str]
         """Get the next command in the instruction list without executing it in the VM.
 
         Returns:
@@ -119,7 +119,7 @@ class CSNadiaVM(object):
         return self._parsed_instructions[0].command.value
 
     def get_vm_stack(self):
-        # type: (CSNadiaVM) -> List[Any]
+        # type: () -> List[Any]
         """Get the current virtual machine stack.
 
         Returns:
@@ -128,7 +128,7 @@ class CSNadiaVM(object):
         return self._stack
 
     def get_namespace(self, name):
-        # type: (CSNadiaVM, str) -> Optional[List[Any]]
+        # type: (str) -> Optional[List[Any]]
         """Get the specified item in the virtual machine.
 
         Arguments:
@@ -145,7 +145,7 @@ class CSNadiaVM(object):
         return listed
 
     def get_position(self):
-        # type: (CSNadiaVM) -> tuple[int, int]
+        # type: () -> Tuple[int, int]
         """Get the current player position from the VM execution stack.
 
         Returns:
@@ -154,7 +154,7 @@ class CSNadiaVM(object):
         return self._player_pos
 
     def get_binding(self, name):
-        # type: (CSNadiaVN) -> Optional[language.CSNadiaLanguageCommand]
+        # type: (str) -> Optional[language.CSNadiaLanguageCommand]
         """Get the associated command bound to a given name.
 
         Arguments:
@@ -166,13 +166,13 @@ class CSNadiaVM(object):
         return self._binds.get(name, None)
 
     def clear(self):
-        # type: (CSNadiaVM) -> None
+        # type: () -> None
         """Clear all existing instructions, both parsed and unparsed."""
         self._instructions = []
         self._parsed_instructions = []
 
     def next(self):
-        # type: (CSNadiaVM) -> None
+        # type: () -> None
         """Execute the next instruction in the VM code.
 
         Raises:
@@ -231,7 +231,7 @@ class CSNadiaVM(object):
             command()
 
     def input(self, command):
-        # type: (CSNadiaVM, str) -> Optional[any]
+        # type: (str) -> Optional[Any]
         """Run the specified command in the virtual machine.
 
         If the virtual machine is set to interactive, then the command will be inserted in the
@@ -401,7 +401,7 @@ class CSNadiaVMWriterBuilder(object):
     instructions = []
 
     def __init__(self, path):
-        # type: (CSNadiaVMWriterBuilder, str) -> None
+        # type: (str) -> None
         """Construct the VM writer builder.
 
         Arguments:
@@ -422,7 +422,7 @@ class CSNadiaVMWriterBuilder(object):
         self.write()
 
     def alloc(self, array_name, size=1):
-        # type: (CSNadiaVMWriterBuilder, str, int) -> None
+        # type: (str, int) -> None
         """Allocate a space of memory for a given array.
 
         Arguments:
@@ -432,7 +432,7 @@ class CSNadiaVMWriterBuilder(object):
         self.instructions.append("alloc %s %s\n" % (array_name, size))
 
     def push(self, array, index):
-        # type: (CSNadiaVMWriterBuilder, str, int) -> None
+        # type: (str, int) -> None
         """Push the top-most item on the current stack to the given array.
 
         Arguments:
@@ -442,7 +442,7 @@ class CSNadiaVMWriterBuilder(object):
         self.instructions.append("push %s %s\n" % (array, index))
 
     def pop(self, array, index):
-        # type: (CSNadiaVMWriterBuilder, str, int) -> None
+        # type: (str, int) -> None
         """Pop the item from the array at a given index and set it at the top
         of the execution stack.
 
@@ -453,7 +453,7 @@ class CSNadiaVMWriterBuilder(object):
         self.instructions.append("pop %s %s\n" % (array, index))
 
     def set(self, value):
-        # type: (CSNadiaVMWriterBuilder, any) -> None
+        # type: (Any) -> None
         """Set the top of the stack to a constant value.
 
         Arguments:
@@ -462,7 +462,7 @@ class CSNadiaVMWriterBuilder(object):
         self.instructions.append("set constant " + str(value) + "\n")
 
     def move(self, direction):
-        # type: (CSNadiaVMWriterBuilder, str) -> None
+        # type: (str) -> None
         """Move the player in a given direction.
 
         Arguments:
@@ -471,7 +471,7 @@ class CSNadiaVMWriterBuilder(object):
         self.instructions.append("move player " + direction + "\n")
 
     def bind(self, name, command):
-        # type: (CSNadiaVMWriterBuilder, str, str) -> None
+        # type: (str, str) -> None
         """Bind the following name to a command.
 
         Arguments:
@@ -481,7 +481,7 @@ class CSNadiaVMWriterBuilder(object):
         self.instructions.append("bind %s %s\n" % (name, command))
 
     def cast(self, name, value):
-        # type: (CSNadiaVMWriterBuilder, str, Any) -> None
+        # type: (str, Any) -> None
         """Cast the value to a name.
 
         Arguments:
@@ -491,12 +491,12 @@ class CSNadiaVMWriterBuilder(object):
         self.instructions.append("bind %s %s\n" % (name, value))
 
     def collect(self):
-        # type: (CSNadiaVMWriterBuilder) -> None
+        # type: () -> None
         """Collect. In the VM, this acts like a pause."""
         self.instructions.append("collect\n")
 
     def exit(self):
-        # type: (CSNadiaVMWriterBuilder) -> None
+        # type: () -> None
         """Try to exit the world and end execution of the script."""
         self.instructions.append("exit player\n")
 
@@ -524,18 +524,18 @@ class CSNadiaVMWriterBuilder(object):
         self.instructions.append("neg\n")
 
     def write(self):
-        # type: (CSNadiaVMWriterBuilder) -> None
+        # type: () -> None
         """Write the VM code to the requested file."""
         with open(self.path, 'w+') as vm_file_stream:
             vm_file_stream.write("".join(self.instructions))
 
     def clear(self):
-        # type: (CSNadiaVMWriterBuilder) -> None
+        # type: () -> None
         """Clear all of the current instructions in the VM stack."""
         del self.instructions[:]
 
     def undo(self, ignore_collect=True):
-        # type: (CSNadiaVMWriterBuilder, bool) -> None
+        # type: (bool) -> None
         """Remove the top of the instruction stack.
 
         Arguments:
@@ -556,7 +556,7 @@ class CSNadiaVMWriter(object):
     code = """"""
 
     def __init__(self, path):
-        # type: (CSNadiaVMWriter, str) -> None
+        # type: (str) -> None
         """Construct the VM writer.
 
         Arguments:
@@ -574,7 +574,7 @@ class CSNadiaVMWriter(object):
         self.write()
 
     def alloc(self, array_name, size=1):
-        # type: (CSNadiaVMWriter, str, int) -> None
+        # type: (str, int) -> None
         """Allocate a space of memory for a given array.
 
         Arguments:
@@ -584,7 +584,7 @@ class CSNadiaVMWriter(object):
         self.code += "alloc %s %s\n" % (array_name, size)
 
     def push(self, array, index):
-        # type: (CSNadiaVMWriter, str, int) -> None
+        # type: (str, int) -> None
         """Push the top-most item on the current stack to the given array.
 
         Arguments:
@@ -594,7 +594,7 @@ class CSNadiaVMWriter(object):
         self.code += "push %s %s\n" % (array, index)
 
     def pop(self, array, index):
-        # type: (CSNadiaVMWriter, str, int) -> None
+        # type: (str, int) -> None
         """Pop the item from the array at a given index and set it at the top
         of the execution stack.
 
@@ -605,7 +605,7 @@ class CSNadiaVMWriter(object):
         self.code += "pop %s %s\n" % (array, index)
 
     def set(self, value):
-        # type: (CSNadiaVMWriter, any) -> None
+        # type: (Any) -> None
         """Set the top of the stack to a constant value.
 
         Arguments:
@@ -614,7 +614,7 @@ class CSNadiaVMWriter(object):
         self.code += "set constant " + str(value) + "\n"
 
     def move(self, direction):
-        # type: (CSNadiaVMWriter, str) -> None
+        # type: (str) -> None
         """Move the player in a given direction.
 
         Arguments:
@@ -623,7 +623,7 @@ class CSNadiaVMWriter(object):
         self.code += "move player " + direction + "\n"
 
     def bind(self, name, command):
-        # type: (CSNadiaVMWriter, str, str) -> None
+        # type: (str, str) -> None
         """Bind the following name to a command.
 
         Arguments:
@@ -633,7 +633,7 @@ class CSNadiaVMWriter(object):
         self.code += "bind %s %s\n" % (name, command)
 
     def cast(self, name, value):
-        # type: (CSNadiaVMWriter, str, Any) -> None
+        # type: (str, Any) -> None
         """Cast the value to a name.
 
         Arguments:
@@ -643,12 +643,12 @@ class CSNadiaVMWriter(object):
         self.code += "bind %s %s\n" % (name, value)
 
     def collect(self):
-        # type: (CSNadiaVMWriter) -> None
+        # type: () -> None
         """Collect. In the VM, this can act like a pause."""
         self.code += "collect\n"
 
     def exit(self):
-        # type: (CSNadiaVMWriter) -> None
+        # type: () -> None
         """Try to exit the world and end execution of the script."""
         self.code += "exit player\n"
 
@@ -676,7 +676,7 @@ class CSNadiaVMWriter(object):
         self.code += "neg\n"
 
     def write(self):
-        # type: (CSNadiaVMWriter) -> None
+        # type: () -> None
         """Write the VM code to the requested file."""
         with open(self.path, 'w+') as vm_file_stream:
             vm_file_stream.write(self.code)

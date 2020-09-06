@@ -13,7 +13,7 @@
 """This submodule contains the configuration system for reading worlds."""
 
 from enum import Enum
-from typing import List
+from typing import List, Callable
 import os
 import warnings
 import toml
@@ -60,7 +60,7 @@ class CSWorldConfigReader(object):
 
     @property
     def allowed(self):
-        # type: (CSWorldConfigReader) -> List[str]
+        # type: () -> List[str]
         """A list containing the allowed blocks for a given world.
 
         Unnecessary if using Advanced Mode.
@@ -70,7 +70,7 @@ class CSWorldConfigReader(object):
         return self._allowed
 
     def __init__(self, filepath="", **kwargs):
-        # type: (CSWorldConfigReader, str, dict) -> None
+        # type: (str, dict) -> None
         """Construct the configuration reader.
 
         .. WARNING::
@@ -108,14 +108,14 @@ class CSWorldConfigReader(object):
             load_fn = default_load_fn
 
             if "exists" in kwargs and callable(kwargs["exists"]):
-                exists_fn = kwargs["exists"]
+                exists_fn = kwargs["exists"]  # type: Callable[[str]]
 
             if not exists_fn(filepath):
                 raise IOError(
                     "Config file is inaccessible or doesn't exist: %s" % (filepath))
 
             if "load" in kwargs and callable(kwargs["load"]):
-                load_fn = kwargs["load"]
+                load_fn = kwargs["load"]  # type: Callable[[str]]
 
             with load_fn(filepath) as file_object:
                 config = toml.load(file_object)
@@ -165,4 +165,4 @@ class CSWorldConfigReader(object):
         if "world" in kwargs:
             self._world_str = kwargs["world"]
 
-        self.data = CSWorldDataGenerator(self._world_str)
+        self.data = CSWorldDataGenerator(str(self._world_str))

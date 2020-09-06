@@ -13,6 +13,7 @@
 """This submodule contains the world data generator code for the configuration system."""
 
 import warnings
+from typing import Tuple
 from .grid import CSGrid
 
 
@@ -32,7 +33,7 @@ class CSWorldDataGenerator(object):
     _dimensions = 0, 0
 
     def __init__(self, data=""):
-        # type: (CSWorldDataGenerator, str) -> None
+        # type: (str) -> None
         """Construct the world data generator.
 
         Arguments:
@@ -92,7 +93,7 @@ class CSWorldDataGenerator(object):
         return ("Dimensions: %s\nMap\n=====\n" + self._str) % (self._dimensions)
 
     def size(self):
-        # type: (CSWorldDataGenerator) -> tuple[int, int]
+        # type: () -> Tuple[int, int]
         """Get the size of the given world data grid.
 
         Returns:
@@ -101,7 +102,7 @@ class CSWorldDataGenerator(object):
         return self._dimensions
 
     def to_grid(self):
-        # type: (CSWorldDataGenerator) -> CSGrid
+        # type: () -> CSGrid
         """Get the world data as a world grid.
 
         Returns:
@@ -110,7 +111,7 @@ class CSWorldDataGenerator(object):
         return CSGrid(self._data, grid_filter=None)
 
     def coins(self):
-        # type: (CSWorldDataGenerator) -> CSGrid
+        # type: () -> CSGrid
         """Get the world coin data.
 
         This is deprecated in favor of CSGrid.devices.
@@ -123,7 +124,7 @@ class CSWorldDataGenerator(object):
         return self.devices()
 
     def devices(self):
-        # type: (CSWorldDataGenerator) -> CSGrid
+        # type: () -> CSGrid
         """Get the world's data for all desks with unpowered devices.
 
         Returns:
@@ -132,7 +133,7 @@ class CSWorldDataGenerator(object):
         return CSGrid(self._data, grid_filter=lambda x: x == "DESK")
 
     def walls(self):
-        # type: (CSWorldDataGenerator) -> CSGrid
+        # type: () -> CSGrid
         """Get the world wall data.
 
         Returns:
